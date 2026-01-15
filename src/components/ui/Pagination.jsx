@@ -49,7 +49,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                     onClick={() => typeof page === 'number' && onPageChange(page)}
                     disabled={page === '...'}
                     className={clsx(
-                        'min-w-[40px] h-10 flex items-center justify-center rounded-lg border',
+                        'min-w-40px h-10 flex items-center justify-center rounded-lg border',
                         page === currentPage
                             ? 'bg-primary-600 border-primary-600 text-white'
                             : 'border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700',
