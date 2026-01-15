@@ -1,35 +1,35 @@
-import {createContext, useState, useEffect, useCallback} from "react";
+import React, { createContext, useState, useEffect, useCallback } from 'react'
 import { LOCAL_STORAGE_KEYS } from '../utils/constants'
 
-const AuthContext =createContext();
+export const AuthContext = createContext();
 
-export const AuthProvider = ({children})=>{
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     // Charger l'utilisateur depuis localStorage au démarrage
-    useEffect(()=>{
-        // Vérifier si l'utilisateur est déjà connecté (fake auth)
-        const loadUser = async()=>{
+    useEffect(() => {
+        const loadUser = () => {
             try {
                 const storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.USER)
                 if (storedUser) {
                     // Mettre à jour l'état de manière asynchrone
-                    requestAnimationFrame(()=>{
-                        setUser(JSON.parse(storedUser));
+                    requestAnimationFrame(() => {
+                        setUser(JSON.parse(storedUser))
                     })
                 }
             } catch (error) {
                 console.error('Error loading user:', error)
-            }finally {
-                setTimeout(()=> setLoading(false), 0);
+            } finally {
+                // Delay setLoading pour éviter les re-renders en cascade
+                setTimeout(() => setLoading(false), 0)
             }
         }
-        loadUser()
-        
-    }, []);
 
-    const login = useCallback(async(email, password)=>{
+        loadUser()
+    }, [])
+
+    const login = useCallback(async (email, password) => {
         // Fake authentication
         const fakeUser = {
             id: 1,
@@ -38,10 +38,11 @@ export const AuthProvider = ({children})=>{
             role: 'admin',
             avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=3b82f6&color=fff`,
         }
-        localStorage.setItem(LOCAL_STORAGE_KEYS.USER, JSON.stringify(fakeUser));
-        setUser(fakeUser);
-        return fakeUser;
-    }, []);
+
+        localStorage.setItem(LOCAL_STORAGE_KEYS.USER, JSON.stringify(fakeUser))
+        setUser(fakeUser)
+        return fakeUser
+    }, [])
 
     const logout = useCallback(() => {
         localStorage.removeItem(LOCAL_STORAGE_KEYS.USER)
@@ -70,6 +71,5 @@ export const AuthProvider = ({children})=>{
         <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
-    );
-
-};
+    )
+}
