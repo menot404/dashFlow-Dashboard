@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-const Table = ({ children, className = '' }) => {
+export const Table = ({ children, className = '' }) => {
     return (
         <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
             <table className={clsx('w-full', className)}>
