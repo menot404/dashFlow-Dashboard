@@ -3,7 +3,7 @@ import clsx from 'clsx'
 export const Table = ({ children, className = '' }) => {
     return (
         <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-            <table className={clsx('w-full', className)}>
+            <table className={clsx('w-full border-collapse table-auto', className)}>
                 {children}
             </table>
         </div>
@@ -16,11 +16,14 @@ export const TableHead = ({ children }) => (
     </thead>
 )
 
-export const TableHeader = ({ children, className = '' }) => (
-    <th className={clsx(
-        'px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider',
-        className
-    )}>
+export const TableHeader = ({ children, className = '', align = 'left' }) => (
+    <th
+        className={clsx(
+            'px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700',
+            `text-${align}`,
+            className
+        )}
+    >
         {children}
     </th>
 )
@@ -44,8 +47,15 @@ export const TableRow = ({ children, className = '', onClick }) => (
     </tr>
 )
 
-export const TableCell = ({ children, className = '' }) => (
-    <td className={clsx('px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100', className)}>
+export const TableCell = ({ children, className = '', align = 'left', colSpan }) => (
+    <td
+        className={clsx(
+            'px-4 py-4 text-sm text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700',
+            `text-${align}`,
+            className
+        )}
+        colSpan={colSpan}
+    >
         {children}
     </td>
 )
