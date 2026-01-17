@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
-import { SimpleChart } from '../components/charts/SimpleChart'
+import SimpleChart from '../components/charts/SimpleChart'
 import { useApi } from '../hooks/useApi'
 import { productsService } from '../services/productsService'
 import { usersService } from '../services/usersService'
@@ -28,7 +28,7 @@ const StatCard = ({ title, value, icon: Icon, change, color }) => (
     </Card>
 )
 
-export const Dashboard = () => {
+const Dashboard = () => {
     const [stats, setStats] = useState({
         totalUsers: 0,
         totalProducts: 0,
@@ -150,3 +150,5 @@ export const Dashboard = () => {
         </div>
     )
 }
+
+export default Dashboard;

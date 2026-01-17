@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { LOCAL_STORAGE_KEYS } from '../../utils/constants'
 import { ThemeContext } from './ThemeContext'
 
-export const ThemeProvider = ({ children }) => {
+const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState('light')
 
     useEffect(() => {
@@ -49,3 +49,5 @@ export const ThemeProvider = ({ children }) => {
         </ThemeContext.Provider>
     )
 }
+
+export default ThemeProvider;

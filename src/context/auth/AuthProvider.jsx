@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { LOCAL_STORAGE_KEYS } from '../../utils/constants'
 import { AuthContext } from './AuthContext'
 
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -71,3 +71,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   )
 }
+
+export default AuthProvider;

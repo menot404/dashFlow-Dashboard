@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/useAuth'
 import { isValidEmail, isValidPassword } from '../utils/validators'
 import { Mail, Lock, User, AlertCircle } from 'lucide-react'
 
-export const Register = () => {
+const Register = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -44,7 +44,7 @@ export const Register = () => {
             await login(formData.email, formData.password)
             navigate('/')
         } catch (err) {
-            setError('Une erreur est survenue lors de l\'inscription')
+            setError(`Une erreur est survenue lors de l'inscription: ${err.message}`)
         } finally {
             setLoading(false)
         }
@@ -176,3 +176,5 @@ export const Register = () => {
         </div>
     )
 }
+
+export default Register;

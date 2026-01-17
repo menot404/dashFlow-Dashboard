@@ -5,7 +5,7 @@ import { useTheme } from '../hooks/useTheme'
 import { useAuth } from '../hooks/useAuth'
 import { Save, Moon, Sun, Bell, Shield, User } from 'lucide-react'
 
-export const Settings = () => {
+const Settings = () => {
     const { theme, toggleTheme } = useTheme()
     const { user, updateUser } = useAuth()
     const [notifications, setNotifications] = useState({
@@ -186,3 +186,5 @@ export const Settings = () => {
         </div>
     )
 }
+
+export default Settings;
