@@ -10,7 +10,7 @@ import {
     TableRow,
     TableCell,
 } from '../components/ui/Table'
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
+import { Card, CardContent } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Pagination from '../components/ui/Pagination'
 import SearchInput from '../components/ui/SearchInput'
@@ -20,7 +20,7 @@ import Modal from '../components/ui/Modal'
 import { Edit, Trash2, Plus, Mail, Phone, Globe } from 'lucide-react'
 import { ITEMS_PER_PAGE } from '../utils/constants'
 
-export const Users = () => {
+const Users = () => {
     const [search, setSearch] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedUser, setSelectedUser] = useState(null)
@@ -308,3 +308,5 @@ export const Users = () => {
         </div>
     )
 }
+
+export default Users;

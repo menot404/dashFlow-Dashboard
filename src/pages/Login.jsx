@@ -5,8 +5,7 @@ import Button from '../components/ui/Button'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../components/ui/Card'
 import { isValidEmail } from '../utils/validators'
 import { Mail, Lock, AlertCircle } from 'lucide-react'
-
-export const Login = () => {
+const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -130,3 +129,6 @@ export const Login = () => {
         </div>
     )
 }
+
+
+export  default Login;

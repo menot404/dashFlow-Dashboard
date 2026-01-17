@@ -52,7 +52,7 @@ const NotificationComponent = React.memo(({ notifications, removeNotification })
 
 NotificationComponent.displayName = 'NotificationComponent'
 
-export const NotificationProvider = ({ children }) => {
+const NotificationProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([])
 
     const removeNotification = useCallback((id) => {
@@ -90,3 +90,5 @@ export const NotificationProvider = ({ children }) => {
         </NotificationContext.Provider>
     )
 }
+
+export default NotificationProvider;

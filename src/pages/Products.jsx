@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useApi } from '../hooks/useApi'
 import { usePagination } from '../hooks/usePagination'
 import { productsService } from '../services/productsService'
@@ -21,7 +21,7 @@ import { Edit, Trash2, Plus, Star, Tag } from 'lucide-react'
 import { ITEMS_PER_PAGE } from '../utils/constants'
 import { formatCurrency } from '../utils/helpers'
 
-export const Products = () => {
+const Products = () => {
     const [search, setSearch] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedProduct, setSelectedProduct] = useState(null)
@@ -325,3 +325,5 @@ export const Products = () => {
         </div>
     )
 }
+
+export default Products;

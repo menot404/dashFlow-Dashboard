@@ -49,5 +49,3 @@ export const TableCell = ({ children, className = '' }) => (
         {children}
     </td>
 )
-
-export default Table;

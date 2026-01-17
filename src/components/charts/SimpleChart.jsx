@@ -1,5 +1,5 @@
 
-export const SimpleChart = ({ data, title, type = 'bar' }) => {
+const SimpleChart = ({ data, title, type = 'bar' }) => {
     const maxValue = Math.max(...data.map(item => item.value))
 
     return (
@@ -23,3 +23,5 @@ export const SimpleChart = ({ data, title, type = 'bar' }) => {
         </div>
     )
 }
+
+export default SimpleChart;
