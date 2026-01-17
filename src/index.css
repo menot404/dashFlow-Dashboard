@@ -31,7 +31,7 @@
     --sidebar-foreground: 240 5% 65%;
 }
 
-body{
+body {
     @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100;
     transition: background-color 0.3s ease;
 }
@@ -53,4 +53,36 @@ body{
 
 ::-webkit-scrollbar-thumb:hover {
     @apply bg-gray-500 dark:bg-gray-500;
+}
+
+/* Optimisations pour la page 404 */
+.page-404-gradient {
+    background: linear-gradient(135deg,
+            rgba(239, 246, 255, 0.5) 0%,
+            rgba(255, 251, 235, 0.3) 50%,
+            rgba(254, 242, 242, 0.5) 100%);
+}
+
+.dark .page-404-gradient {
+    background: linear-gradient(135deg,
+            rgba(15, 23, 42, 0.8) 0%,
+            rgba(30, 41, 59, 0.6) 50%,
+            rgba(51, 65, 85, 0.8) 100%);
+}
+
+/* Animation subtile */
+@keyframes subtle-float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.subtle-float {
+    animation: subtle-float 6s ease-in-out infinite;
 }
