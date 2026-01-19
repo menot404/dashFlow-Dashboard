@@ -48,7 +48,7 @@ const StatCard = ({ title, value, icon: Icon, change, color, loading, subtitle, 
                         </>
                     )}
                 </div>
-                <div className={`ml-4 p-3 rounded-xl ${color} bg-opacity-10 group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
+                <div className={`ml-4 p-3 rounded-xl ${color} bg-opacity-10 group-hover:scale-110 transition-transform duration-300 shrink-0`}>
                     <Icon className={`w-6 h-6 ${color}`} />
                 </div>
             </div>
