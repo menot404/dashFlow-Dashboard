@@ -46,10 +46,10 @@ const Settings = () => {
                                     <img
                                         src={user.avatar}
                                         alt={user.name}
-                                        className="w-16 h-16 rounded-full flex-shrink-0"
+                                        className="w-16 h-16 rounded-full shrink-0"
                                     />
                                 ) : (
-                                    <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center flex-shrink-0">
+                                    <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center shrink-0">
                                         <User className="w-8 h-8 text-primary-600 dark:text-primary-400" />
                                     </div>
                                 )}
