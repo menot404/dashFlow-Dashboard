@@ -1,6 +1,6 @@
 // Logging des erreurs côté client
 export const logError = (error, errorInfo) => {
-  if (process.env.NODE_ENV === 'development') {
+  if (import.meta.env.Dev) {
     console.error('Error:', error, errorInfo)
   }
   
