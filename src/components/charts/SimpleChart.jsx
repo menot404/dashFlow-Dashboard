@@ -120,11 +120,11 @@ const SimpleChart = ({
                                     {/* Bar */}
                                     <div
                                         className={`
-                      w-full rounded-t-lg transition-all duration-500 
-                      bg-gradient-to-t ${colors[color].bar}
-                      hover:shadow-lg hover:scale-105
-                      ${animation ? 'animate-bar-grow' : ''}
-                      ${isHovered ? 'opacity-100' : 'opacity-90 hover:opacity-100'}
+                        w-full rounded-t-lg transition-all duration-500 
+                        bg-linear-to-t ${colors[color].bar}
+                        hover:shadow-lg hover:scale-105
+                        ${animation ? 'animate-bar-grow' : ''}
+                        ${isHovered ? 'opacity-100' : 'opacity-90 hover:opacity-100'}
                     `}
                                         style={{
                                             height: `${barHeight}%`,
@@ -254,7 +254,7 @@ const SimpleChart = ({
                                     >
                                         <div
                                             className={`
-                        w-full rounded-t-lg bg-gradient-to-t ${colors[color].bar}
+                        w-full rounded-t-lg bg-linear-to-t ${colors[color].bar}
                         transition-all duration-500
                         ${animation ? 'animate-bar-grow' : ''}
                         ${hoveredIndex === index ? 'opacity-100' : 'opacity-70'}
@@ -301,7 +301,7 @@ const SimpleChart = ({
             {/* Legend */}
             <div className="flex items-center justify-center mt-6 space-x-4">
                 <div className="flex items-center space-x-2">
-                    <div className={`w-3 h-3 rounded ${type === 'line' ? 'bg-primary-500' : `bg-gradient-to-t ${colors[color].bar}`}`} />
+                    <div className={`w-3 h-3 rounded ${type === 'line' ? 'bg-primary-500' : `bg-linear-to-t ${colors[color].bar}`}`} />
                     <span className="text-sm text-gray-600 dark:text-gray-400">
                         {type === 'bar' ? 'Ventes' : type === 'line' ? 'Tendance' : 'Performance'}
                     </span>

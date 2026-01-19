@@ -194,7 +194,7 @@ const Products = () => {
     }
 
     if (productsApi.loading && !productsApi.data) {
-        return <LoadingSpinner className="min-h-[400px]" />
+        return <LoadingSpinner className="min-h-100" />
     }
 
     if (productsApi.error) {
@@ -202,7 +202,7 @@ const Products = () => {
             <ErrorMessage
                 message="Erreur lors du chargement des produits"
                 onRetry={loadProducts}
-                className="min-h-[400px]"
+                className="min-h-100"
             />
         )
     }
@@ -314,7 +314,7 @@ const Products = () => {
                                                 <img
                                                     src={product.image}
                                                     alt={product.title}
-                                                    className="w-10 h-10 object-cover rounded-lg mr-3 flex-shrink-0"
+                                                    className="w-10 h-10 object-cover rounded-lg mr-3 shrink-0"
                                                     onError={handleImageError}
                                                 />
                                                 <div className="min-w-0">
@@ -329,7 +329,7 @@ const Products = () => {
                                         </TableCell>
                                         <TableCell className="hidden lg:table-cell">
                                             <div className="flex items-center">
-                                                <Tag className="w-4 h-4 mr-2 text-gray-400 flex-shrink-0" />
+                                                <Tag className="w-4 h-4 mr-2 text-gray-400 shrink-0" />
                                                 <span className="capitalize text-gray-700 dark:text-gray-300">
                                                     {product.category}
                                                 </span>
@@ -342,7 +342,7 @@ const Products = () => {
                                         </TableCell>
                                         <TableCell className="hidden lg:table-cell">
                                             <div className="flex items-center">
-                                                <Star className="w-4 h-4 text-yellow-500 fill-current mr-1 flex-shrink-0" />
+                                                <Star className="w-4 h-4 text-yellow-500 fill-current mr-1 shrink-0" />
                                                 <span className="text-gray-900 dark:text-gray-100">
                                                     {product.rating?.rate?.toFixed(1) || 'N/A'}
                                                 </span>
@@ -390,7 +390,7 @@ const Products = () => {
                                 <img
                                     src={product.image}
                                     alt={product.title}
-                                    className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                                    className="w-16 h-16 object-cover rounded-lg shrink-0"
                                     onError={handleImageError}
                                 />
                                 <div className="flex-1 min-w-0">

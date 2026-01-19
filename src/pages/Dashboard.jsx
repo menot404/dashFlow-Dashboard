@@ -7,7 +7,7 @@ import { usersService } from '../services/usersService'
 import {
     Users, Package, TrendingUp, DollarSign, Calendar,
     ShoppingCart, BarChart3, Clock, Download, Filter,
-    TrendingDown, Activity, Target, Zap, Eye, ThumbsUp,
+    TrendingDown, Zap, ThumbsUp,
     Smartphone, Monitor, Tablet, Globe, CreditCard
 } from 'lucide-react'
 import {
@@ -494,7 +494,7 @@ export const Dashboard = () => {
                                     className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors group"
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/20 dark:to-blue-800/20 flex items-center justify-center">
+                                        <div className="w-10 h-10 rounded-lg bg-linear-to-br from-blue-100 to-blue-200 dark:from-blue-900/20 dark:to-blue-800/20 flex items-center justify-center">
                                             <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
                                                 #{index + 1}
                                             </span>
@@ -537,7 +537,7 @@ export const Dashboard = () => {
                                     </div>
                                     <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full"
+                                            className="h-full bg-linear-to-r from-green-400 to-green-600 rounded-full"
                                             style={{ width: `${Math.min(stats.conversion * 10, 100)}%` }}
                                         />
                                     </div>
@@ -550,7 +550,7 @@ export const Dashboard = () => {
                                     </div>
                                     <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-gradient-to-r from-orange-400 to-orange-600 rounded-full"
+                                            className="h-full bg-linear-to-r from-orange-400 to-orange-600 rounded-full"
                                             style={{ width: `${stats.customerSatisfaction * 20}%` }}
                                         />
                                     </div>
@@ -563,7 +563,7 @@ export const Dashboard = () => {
                                     </div>
                                     <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full"
+                                            className="h-full bg-linear-to-r from-purple-400 to-purple-600 rounded-full"
                                             style={{ width: `${Math.min((stats.avgOrderValue / 200) * 100, 100)}%` }}
                                         />
                                     </div>
@@ -614,8 +614,8 @@ export const Dashboard = () => {
                                 key={index}
                                 className="flex items-center p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors group"
                             >
-                                <div className="flex-shrink-0 mr-4">
-                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/20 dark:to-primary-800/20 flex items-center justify-center">
+                                <div className="shrink-0 mr-4">
+                                    <div className="w-12 h-12 rounded-full bg-linear-to-br from-primary-100 to-primary-200 dark:from-primary-900/20 dark:to-primary-800/20 flex items-center justify-center">
                                         <activity.icon className="w-6 h-6 text-primary-600 dark:text-primary-400" />
                                     </div>
                                 </div>
@@ -629,7 +629,7 @@ export const Dashboard = () => {
                                         </p>
                                     )}
                                 </div>
-                                <div className="flex-shrink-0 ml-4">
+                                <div className="shrink-0 ml-4">
                                     <span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-full">
                                         {activity.time}
                                     </span>

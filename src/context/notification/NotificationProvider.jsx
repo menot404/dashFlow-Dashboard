@@ -45,7 +45,7 @@ const NotificationComponent = React.memo(({ notifications, removeNotification })
                     >
                         <div className="p-4">
                             <div className="flex items-start">
-                                <div className="flex-shrink-0">
+                                <div className="shrink-0">
                                     <Icon className={`w-5 h-5 ${iconColor}`} />
                                 </div>
                                 <div className="ml-3 w-0 flex-1">
@@ -68,7 +68,7 @@ const NotificationComponent = React.memo(({ notifications, removeNotification })
                                         </div>
                                     )}
                                 </div>
-                                <div className="ml-4 flex-shrink-0 flex">
+                                <div className="ml-4 shrink-0 flex">
                                     <button
                                         onClick={() => removeNotification(notification.id)}
                                         className="inline-flex text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"

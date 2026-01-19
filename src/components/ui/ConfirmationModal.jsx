@@ -44,7 +44,6 @@ const ConfirmationModal = ({
     type = 'warning',
     isLoading = false,
     destructive = false,
-    confirmButtonVariant = 'danger',
 }) => {
     const Icon = icons[type]
     const colorScheme = colors[type]
