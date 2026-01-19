@@ -159,7 +159,7 @@ export const Users = () => {
     }
 
     if (usersApi.loading && !usersApi.data) {
-        return <LoadingSpinner className="min-h-[400px]" />
+        return <LoadingSpinner className="min-h-100" />
     }
 
     if (usersApi.error) {
@@ -167,7 +167,7 @@ export const Users = () => {
             <ErrorMessage
                 message="Erreur lors du chargement des utilisateurs"
                 onRetry={loadUsers}
-                className="min-h-[400px]"
+                className="min-h-100"
             />
         )
     }
@@ -275,7 +275,7 @@ export const Users = () => {
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex items-center">
-                                                <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center mr-3 flex-shrink-0">
+                                                <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center mr-3 shrink-0">
                                                     <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
                                                         {user.name.charAt(0)}
                                                     </span>
@@ -290,19 +290,19 @@ export const Users = () => {
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex items-center text-gray-600 dark:text-gray-400">
-                                                <Mail className="w-4 h-4 mr-2 flex-shrink-0" />
+                                                <Mail className="w-4 h-4 mr-2 shrink-0" />
                                                 <span className="truncate">{user.email}</span>
                                             </div>
                                         </TableCell>
                                         <TableCell className="hidden lg:table-cell">
                                             <div className="flex items-center text-gray-600 dark:text-gray-400">
-                                                <Phone className="w-4 h-4 mr-2 flex-shrink-0" />
+                                                <Phone className="w-4 h-4 mr-2 shrink-0" />
                                                 <span className="truncate">{user.phone}</span>
                                             </div>
                                         </TableCell>
                                         <TableCell className="hidden lg:table-cell">
                                             <div className="flex items-center text-gray-600 dark:text-gray-400">
-                                                <Globe className="w-4 h-4 mr-2 flex-shrink-0" />
+                                                <Globe className="w-4 h-4 mr-2 shrink-0" />
                                                 <span className="truncate">{user.company.name}</span>
                                             </div>
                                         </TableCell>
@@ -343,7 +343,7 @@ export const Users = () => {
                         <CardContent className="p-4">
                             <div className="flex items-start justify-between">
                                 <div className="flex items-center flex-1 min-w-0">
-                                    <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center mr-3 flex-shrink-0">
+                                    <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center mr-3 shrink-0">
                                         <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
                                             {user.name.charAt(0)}
                                         </span>

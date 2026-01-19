@@ -32,7 +32,7 @@ export class ErrorBoundary extends React.Component {
     render() {
         if (this.state.hasError) {
             return (
-                <div className="min-h-[400px] flex flex-col items-center justify-center p-6 animate-fade-in">
+                <div className="min-h-100 flex flex-col items-center justify-center p-6 animate-fade-in">
                     <AlertTriangle className="w-16 h-16 text-amber-500 mb-4" />
                     <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
                         Oups, une erreur est survenue

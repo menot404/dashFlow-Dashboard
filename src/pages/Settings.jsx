@@ -128,7 +128,7 @@ const Settings = () => {
                             ].map((item) => (
                                 <div key={item.id} className="flex items-center justify-between">
                                     <div className="flex items-start">
-                                        <Bell className="w-5 h-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0" />
+                                        <Bell className="w-5 h-5 text-gray-400 mr-3 mt-0.5 shrink-0" />
                                         <div className="flex-1">
                                             <p className="font-medium text-gray-900 dark:text-gray-100">{item.label}</p>
                                             <p className="text-sm text-gray-600 dark:text-gray-400">{item.description}</p>
@@ -148,7 +148,7 @@ const Settings = () => {
                                   peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800
                                   rounded-full peer dark:bg-gray-700
                                   peer-checked:after:translate-x-full peer-checked:after:border-white
-                                  after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                                  after:content-[''] after:absolute after:top-0.5 after:left-0.5
                                   after:bg-white after:border-gray-300 after:border
                                   after:rounded-full after:h-5 after:w-5 after:transition-all
                                   dark:border-gray-600 peer-checked:bg-primary-600">

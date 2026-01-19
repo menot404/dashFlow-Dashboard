@@ -14,14 +14,14 @@ const NotFound = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="text-center mb-12">
           <div className="relative inline-block mb-6">
             <div className="text-[120px] md:text-[160px] font-bold text-gray-900 dark:text-gray-100 leading-none">
               404
             </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-orange-500/20 dark:from-red-600/30 dark:to-orange-600/30 blur-3xl" />
+            <div className="absolute inset-0 bg-linear-to-r from-red-500/20 to-orange-500/20 dark:from-red-600/30 dark:to-orange-600/30 blur-3xl" />
           </div>
           
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
