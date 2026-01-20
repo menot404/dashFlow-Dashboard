@@ -171,12 +171,12 @@ const SimpleChart = ({
                             <path
                                 d={`
                   M ${(100 / (data.length - 1)) * 0}% ${100 - (data[0].value / maxValue) * 100}%
-                  ${data.slice(1).map((item, i) =>
+                    ${data.slice(1).map((item, i) =>
                                     `L ${(100 / (data.length - 1)) * (i + 1)}% ${100 - (item.value / maxValue) * 100}%`
                                 ).join(' ')}
-                  L ${100}% 100%
-                  L 0% 100%
-                  Z
+                        L ${100}% 100%
+                    L 0% 100%
+                    Z
                 `}
                                 fill="url(#line-gradient)"
                                 className="text-primary-500"
@@ -217,7 +217,7 @@ const SimpleChart = ({
                         hover:scale-150 hover:shadow-lg
                         ${colors[color].line}
                         ${animation ? 'animate-pulse' : ''}
-                      `}
+                        `}
                                             style={{
                                                 left: `${x}%`,
                                                 top: `${y}%`,
@@ -257,8 +257,7 @@ const SimpleChart = ({
                         w-full rounded-t-lg bg-linear-to-t ${colors[color].bar}
                         transition-all duration-500
                         ${animation ? 'animate-bar-grow' : ''}
-                        ${hoveredIndex === index ? 'opacity-100' : 'opacity-70'}
-                      `}
+                        `}
                                             style={getAnimationDelay(index)}
                                         />
                                     </div>
@@ -314,25 +313,25 @@ const SimpleChart = ({
             {/* CSS Animations */}
             <style jsx>{`
         @keyframes barGrow {
-          from { height: 0%; opacity: 0; }
-          to { height: var(--target-height); opacity: 1; }
+            from { height: 0%; opacity: 0; }
+            to { height: var(--target-height); opacity: 1; }
         }
         
         .animate-bar-grow {
-          animation: barGrow 0.6s ease-out forwards;
-          animation-delay: var(--animation-delay, 0ms);
+            animation: barGrow 0.6s ease-out forwards;
+            animation-delay: var(--animation-delay, 0ms);
         }
         
         .animate-line-draw {
-          stroke-dasharray: 1000;
-          stroke-dashoffset: 1000;
-          animation: draw 1.5s ease-out forwards;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw 1.5s ease-out forwards;
         }
         
         @keyframes draw {
-          to { stroke-dashoffset: 0; }
+            to { stroke-dashoffset: 0; }
         }
-      `}</style>
+        `}</style>
         </div>
     );
 };

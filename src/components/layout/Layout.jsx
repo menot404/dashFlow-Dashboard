@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar';
 import Header from './Header';
-import { Menu, X } from 'lucide-react'
+import { Menu } from 'lucide-react'
 const Layout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -21,7 +21,7 @@ const Layout = () => {
         fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out
         md:relative md:translate-x-0 md:z-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+        `}>
                 <Sidebar onClose={() => setSidebarOpen(false)} />
             </div>
 

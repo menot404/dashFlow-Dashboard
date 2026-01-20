@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { LOCAL_STORAGE_KEYS } from '../../utils/constants'
 import { ThemeContext } from './ThemeContext'
 

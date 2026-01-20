@@ -476,8 +476,8 @@ const Products = () => {
                                 value={formData.title}
                                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                         bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                         focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                 placeholder="Nom du produit"
                                 required
                                 autoFocus
@@ -497,8 +497,8 @@ const Products = () => {
                                     value={formData.price}
                                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                                     className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                     placeholder="19.99"
                                     required
                                 />
@@ -515,8 +515,8 @@ const Products = () => {
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                     className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                     required
                                 >
                                     <option value="">Sélectionner une catégorie</option>
@@ -539,8 +539,8 @@ const Products = () => {
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 rows="3"
                                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                         bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                         focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                 placeholder="Description détaillée du produit..."
                                 required
                             />
@@ -557,8 +557,8 @@ const Products = () => {
                                     value={formData.image}
                                     onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                                     className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                     placeholder="https://example.com/image.jpg"
                                 />
                             </div>
