@@ -11,79 +11,129 @@ const icons = {
 
 const NotificationComponent = React.memo(({ notifications, removeNotification }) => {
     return (
-        <div className="fixed top-4 right-4 z-50 space-y-2 max-w-sm">
+        <div className="fixed top-4 right-4 z-50 space-y-3 max-w-md">
             {notifications.map((notification) => {
                 const Icon = icons[notification.type]
-                const bgColor = {
-                    success: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
-                    error: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
-                    warning: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800',
-                    info: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800',
-                }[notification.type]
 
-                const textColor = {
-                    success: 'text-green-800 dark:text-green-200',
-                    error: 'text-red-800 dark:text-red-200',
-                    warning: 'text-yellow-800 dark:text-yellow-200',
-                    info: 'text-blue-800 dark:text-blue-200',
-                }[notification.type]
-
-                const iconColor = {
-                    success: 'text-green-500',
-                    error: 'text-red-500',
-                    warning: 'text-yellow-500',
-                    info: 'text-blue-500',
+                const styles = {
+                    success: {
+                        bg: 'bg-white dark:bg-gray-800',
+                        border: 'border-l-4 border-green-500',
+                        icon: 'text-green-500',
+                        title: 'text-green-900 dark:text-green-100',
+                        message: 'text-green-700 dark:text-green-200',
+                        progress: 'bg-green-500',
+                        shadow: 'shadow-lg shadow-green-500/10'
+                    },
+                    error: {
+                        bg: 'bg-white dark:bg-gray-800',
+                        border: 'border-l-4 border-red-500',
+                        icon: 'text-red-500',
+                        title: 'text-red-900 dark:text-red-100',
+                        message: 'text-red-700 dark:text-red-200',
+                        progress: 'bg-red-500',
+                        shadow: 'shadow-lg shadow-red-500/10'
+                    },
+                    warning: {
+                        bg: 'bg-white dark:bg-gray-800',
+                        border: 'border-l-4 border-yellow-500',
+                        icon: 'text-yellow-500',
+                        title: 'text-yellow-900 dark:text-yellow-100',
+                        message: 'text-yellow-700 dark:text-yellow-200',
+                        progress: 'bg-yellow-500',
+                        shadow: 'shadow-lg shadow-yellow-500/10'
+                    },
+                    info: {
+                        bg: 'bg-white dark:bg-gray-800',
+                        border: 'border-l-4 border-blue-500',
+                        icon: 'text-blue-500',
+                        title: 'text-blue-900 dark:text-blue-100',
+                        message: 'text-blue-700 dark:text-blue-200',
+                        progress: 'bg-blue-500',
+                        shadow: 'shadow-lg shadow-blue-500/10'
+                    },
                 }[notification.type]
 
                 return (
                     <div
                         key={notification.id}
-                        className={`${bgColor} border rounded-lg shadow-lg transform transition-all duration-300 animate-slide-in`}
+                        className={`
+                            ${styles.bg} ${styles.border} ${styles.shadow}
+                            rounded-lg overflow-hidden
+                            transform transition-all duration-300 
+                            animate-slide-in backdrop-blur-sm
+                            border border-gray-200 dark:border-gray-700
+                        `}
                         style={{
-                            animation: 'slideIn 0.3s ease-out',
+                            animation: 'slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                         }}
                     >
                         <div className="p-4">
-                            <div className="flex items-start">
-                                <div className="shrink-0">
-                                    <Icon className={`w-5 h-5 ${iconColor}`} />
+                            <div className="flex items-start gap-3">
+                                {/* Icône avec arrière-plan coloré */}
+                                <div className={`
+                                    shrink-0 rounded-full p-2
+                                    ${notification.type === 'success' ? 'bg-green-100 dark:bg-green-900/30' : ''}
+                                    ${notification.type === 'error' ? 'bg-red-100 dark:bg-red-900/30' : ''}
+                                    ${notification.type === 'warning' ? 'bg-yellow-100 dark:bg-yellow-900/30' : ''}
+                                    ${notification.type === 'info' ? 'bg-blue-100 dark:bg-blue-900/30' : ''}
+                                `}>
+                                    <Icon className={`w-5 h-5 ${styles.icon}`} />
                                 </div>
-                                <div className="ml-3 w-0 flex-1">
+
+                                {/* Contenu */}
+                                <div className="flex-1 min-w-0">
                                     {notification.title && (
-                                        <p className={`text-sm font-medium ${textColor}`}>
+                                        <p className={`text-sm font-semibold ${styles.title} mb-1`}>
                                             {notification.title}
                                         </p>
                                     )}
-                                    <p className={`mt-1 text-sm ${notification.title ? 'text-gray-600 dark:text-gray-300' : textColor}`}>
+                                    <p className={`text-sm ${styles.message} leading-relaxed`}>
                                         {notification.message}
                                     </p>
                                     {notification.action && (
                                         <div className="mt-3">
                                             <button
                                                 onClick={notification.action.onClick}
-                                                className={`text-sm font-medium ${textColor} underline hover:no-underline`}
+                                                className={`
+                                                    text-sm font-medium ${styles.icon} 
+                                                    hover:underline focus:outline-none 
+                                                    focus:ring-2 focus:ring-offset-2 rounded-sm
+                                                    ${notification.type === 'success' ? 'focus:ring-green-500' : ''}
+                                                    ${notification.type === 'error' ? 'focus:ring-red-500' : ''}
+                                                    ${notification.type === 'warning' ? 'focus:ring-yellow-500' : ''}
+                                                    ${notification.type === 'info' ? 'focus:ring-blue-500' : ''}
+                                                `}
                                             >
                                                 {notification.action.label}
                                             </button>
                                         </div>
                                     )}
                                 </div>
-                                <div className="ml-4 shrink-0 flex">
-                                    <button
-                                        onClick={() => removeNotification(notification.id)}
-                                        className="inline-flex text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
-                                    >
-                                        <X className="w-5 h-5" />
-                                    </button>
-                                </div>
+
+                                {/* Bouton fermer */}
+                                <button
+                                    onClick={() => removeNotification(notification.id)}
+                                    className="
+                                        shrink-0 rounded-lg p-1.5
+                                        text-gray-400 hover:text-gray-600 
+                                        dark:text-gray-500 dark:hover:text-gray-300
+                                        hover:bg-gray-100 dark:hover:bg-gray-700/50
+                                        transition-colors duration-200
+                                        focus:outline-none focus:ring-2 focus:ring-gray-400
+                                    "
+                                    aria-label="Fermer la notification"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
                             </div>
                         </div>
 
-                        {/* Barre de progression */}
+                        {/* Barre de progression améliorée */}
                         {notification.duration && notification.duration > 0 && (
-                            <div className="h-1 w-full bg-current opacity-20">
+                            <div className="h-1 w-full bg-gray-200 dark:bg-gray-700">
                                 <div
-                                    className="h-full bg-current transition-all duration-100 ease-linear"
+                                    className={`h-full ${styles.progress} transition-all duration-100 ease-linear`}
                                     style={{
                                         width: `${notification.progress || 100}%`,
                                     }}
@@ -93,6 +143,23 @@ const NotificationComponent = React.memo(({ notifications, removeNotification })
                     </div>
                 )
             })}
+
+            <style>{`
+                @keyframes slideIn {
+                    from {
+                        opacity: 0;
+                        transform: translateX(100%) scale(0.95);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(0) scale(1);
+                    }
+                }
+                
+                .animate-slide-in {
+                    animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                }
+            `}</style>
         </div>
     )
 })
@@ -119,7 +186,6 @@ const NotificationProvider = ({ children }) => {
         setNotifications(prev => [...prev, newNotification])
 
         if (duration > 0) {
-            // Animation de la barre de progression
             const interval = 50
             const steps = duration / interval
             let step = 0
@@ -144,13 +210,12 @@ const NotificationProvider = ({ children }) => {
         return id
     }, [removeNotification])
 
-    // Méthodes helpers pour les types de notifications courants
     const showSuccess = useCallback((message, title = 'Succès') => {
         return addNotification({
             title,
             message,
             type: 'success',
-            duration: 3000,
+            duration: 4000,
         })
     }, [addNotification])
 
@@ -202,4 +267,4 @@ const NotificationProvider = ({ children }) => {
     )
 }
 
-export default NotificationProvider;
+export default NotificationProvider
