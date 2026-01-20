@@ -158,6 +158,7 @@ const SimpleChart = ({
                         {/* Gradient Area */}
                         <svg
                             className="absolute inset-0 w-full h-full"
+                            viewBox="0 0 100 100"
                             preserveAspectRatio="none"
                         >
                             <defs>
@@ -170,19 +171,18 @@ const SimpleChart = ({
                             {/* Area Path */}
                             <path
                                 d={`
-                  M ${(100 / (data.length - 1)) * 0}% ${100 - (data[0].value / maxValue) * 100}%
+                  M ${(100 / (data.length - 1)) * 0} ${100 - (data[0].value / maxValue) * 100}
                     ${data.slice(1).map((item, i) =>
-                                    `L ${(100 / (data.length - 1)) * (i + 1)}% ${100 - (item.value / maxValue) * 100}%`
+                                    `L ${(100 / (data.length - 1)) * (i + 1)} ${100 - (item.value / maxValue) * 100}`
                                 ).join(' ')}
-                        L ${100}% 100%
-                    L 0% 100%
+                        L 100 100
+                    L 0 100
                     Z
                 `}
                                 fill="url(#line-gradient)"
                                 className="text-primary-500"
                             />
                         </svg>
-
                         {/* Line */}
                         <div className="relative h-full">
                             {data.map((item, index) => {
@@ -311,26 +311,26 @@ const SimpleChart = ({
             </div>
 
             {/* CSS Animations */}
-            <style jsx>{`
-        @keyframes barGrow {
-            from { height: 0%; opacity: 0; }
-            to { height: var(--target-height); opacity: 1; }
-        }
-        
-        .animate-bar-grow {
-            animation: barGrow 0.6s ease-out forwards;
-            animation-delay: var(--animation-delay, 0ms);
-        }
-        
-        .animate-line-draw {
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: draw 1.5s ease-out forwards;
-        }
-        
-        @keyframes draw {
-            to { stroke-dashoffset: 0; }
-        }
+            <style>{`
+                @keyframes barGrow {
+                    from { height: 0%; opacity: 0; }
+                    to { height: var(--target-height); opacity: 1; }
+                }
+                
+                .animate-bar-grow {
+                    animation: barGrow 0.6s ease-out forwards;
+                    animation-delay: var(--animation-delay, 0ms);
+                }
+                
+                .animate-line-draw {
+                    stroke-dasharray: 1000;
+                    stroke-dashoffset: 1000;
+                    animation: draw 1.5s ease-out forwards;
+                }
+                
+                @keyframes draw {
+                    to { stroke-dashoffset: 0; }
+                }
         `}</style>
         </div>
     );
