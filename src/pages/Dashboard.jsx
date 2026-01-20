@@ -8,7 +8,7 @@ import {
     Users, Package, TrendingUp, DollarSign, Calendar,
     ShoppingCart, BarChart3, Clock, Download, Filter,
     TrendingDown, Zap, ThumbsUp,
-    Smartphone, Monitor, Tablet, Globe, CreditCard
+    Smartphone, Monitor, Tablet, Globe
 } from 'lucide-react'
 import {
     formatCurrency,

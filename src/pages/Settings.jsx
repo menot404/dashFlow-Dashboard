@@ -59,8 +59,8 @@ const Settings = () => {
                                         value={formData.name}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                             bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                             focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                         placeholder="Votre nom"
                                     />
                                 </div>
@@ -77,8 +77,8 @@ const Settings = () => {
                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                             bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                             focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                         placeholder="email@example.com"
                                     />
                                 </div>
@@ -92,8 +92,8 @@ const Settings = () => {
                                         value={formData.phone}
                                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                             bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                             focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                         placeholder="+33 1 23 45 67 89"
                                     />
                                 </div>
@@ -107,8 +107,8 @@ const Settings = () => {
                                         value={formData.website}
                                         onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                             bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                             focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                                         placeholder="https://example.com"
                                     />
                                 </div>
@@ -145,13 +145,13 @@ const Settings = () => {
                                             className="sr-only peer"
                                         />
                                         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4
-                                  peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800
-                                  rounded-full peer dark:bg-gray-700
-                                  peer-checked:after:translate-x-full peer-checked:after:border-white
-                                  after:content-[''] after:absolute after:top-0.5 after:left-0.5
-                                  after:bg-white after:border-gray-300 after:border
-                                  after:rounded-full after:h-5 after:w-5 after:transition-all
-                                  dark:border-gray-600 peer-checked:bg-primary-600">
+                                    peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800
+                                    rounded-full peer dark:bg-gray-700
+                                    peer-checked:after:translate-x-full peer-checked:after:border-white
+                                    after:content-[''] after:absolute after:top-0.5 after:left-0.5
+                                    after:bg-white after:border-gray-300 after:border
+                                    after:rounded-full after:h-5 after:w-5 after:transition-all
+                                    dark:border-gray-600 peer-checked:bg-primary-600">
                                         </div>
                                     </label>
                                 </div>
