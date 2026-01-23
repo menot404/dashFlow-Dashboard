@@ -355,3 +355,65 @@ td.break-words {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
+
+/* Animations */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Améliorations de table */
+.striped-table tbody tr:nth-child(even) {
+  @apply bg-gray-50 dark:bg-gray-800/50;
+}
+
+.hoverable-table tbody tr {
+  @apply transition-colors duration-150;
+}
+
+.hoverable-table tbody tr:hover {
+  @apply bg-gray-100 dark:bg-gray-700;
+}
+
+/* Focus visible amélioré */
+:focus-visible {
+  @apply outline-2 outline-primary-500 outline-offset-2;
+}
+
+/* Transitions globales */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Scrollbar personnalisée */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: theme('colors.gray.400') theme('colors.gray.100');
+}
+
+.dark .custom-scrollbar {
+  scrollbar-color: theme('colors.gray.600') theme('colors.gray.800');
+}
