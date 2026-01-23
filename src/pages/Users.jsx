@@ -21,7 +21,7 @@ import EmptyState from '../components/common/EmptyState'
 import ConfirmationModal from '../components/ui/ConfirmationModal'
 import { useConfirmation } from '../hooks/useConfirmation'
 import { useNotification } from '../hooks/useNotification'
-import { Edit, Trash2, Mail, Phone, Globe, PackagePlus, UserPlus, UserCheck, Search } from 'lucide-react'
+import { Eye, Edit, Trash2, Mail, Phone, Globe, PackagePlus, UserPlus, UserCheck, Search, MoreVertical, Copy, Share2, User, MapPin, Building } from 'lucide-react'
 import { ITEMS_PER_PAGE } from '../utils/constants'
 
 export const Users = () => {
@@ -30,6 +30,8 @@ export const Users = () => {
     const [selectedUser, setSelectedUser] = useState(null)
     const [isDeleting, setIsDeleting] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
+    const [viewingUser, setViewingUser] = useState(null)
+const [userDetailModalOpen, setUserDetailModalOpen] = useState(false)
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -56,6 +58,27 @@ export const Users = () => {
         }
     }
 
+    //Fonction pour voir les détails de l'utilisateur 
+
+    const handleViewUserDetails = (user) => {
+  setViewingUser(user)
+  setUserDetailModalOpen(true)
+}
+
+const handleCopyUserDetails = () => {
+  if (viewingUser) {
+    const details = `
+Utilisateur: ${viewingUser.name}
+Email: ${viewingUser.email}
+Téléphone: ${viewingUser.phone}
+Entreprise: ${viewingUser.company?.name}
+    `.trim()
+    
+    navigator.clipboard.writeText(details)
+    showSuccess('Détails copiés dans le presse-papier')
+  }
+}
+
     const filteredUsers = useMemo(() => {
         if (!usersApi.data) return []
         return usersApi.data.filter(user =>
@@ -78,6 +101,15 @@ export const Users = () => {
         })
         setIsModalOpen(true)
     }
+//Fonction pour obtenir les initiales
+    const getInitials = (name) => {
+  return name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
+}
 
     const handleDelete = (user) => {
         askConfirmation({
@@ -308,26 +340,93 @@ export const Users = () => {
                                             </div>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <div className="flex justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleEdit(user)}
-                                                    className="hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                                                    title="Modifier"
-                                                >
-                                                    <Edit className="w-4 h-4" />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleDelete(user)}
-                                                    className="hover:bg-red-50 dark:hover:bg-red-900/20"
-                                                    title="Supprimer"
-                                                >
-                                                    <Trash2 className="w-4 h-4 text-red-600" />
-                                                </Button>
-                                            </div>
+                                            <div className="flex justify-end space-x-1">
+    {/* Bouton Voir */}
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => handleViewUserDetails(user)}
+      className="hover:bg-blue-50 dark:hover:bg-blue-900/20"
+      title="Voir détails"
+    >
+      <Eye className="w-4 h-4" />
+    </Button>
+    
+    {/* Bouton Modifier */}
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => handleEdit(user)}
+      className="opacity-0 group-hover:opacity-100 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-opacity"
+      title="Modifier"
+    >
+      <Edit className="w-4 h-4" />
+    </Button>
+    
+    {/* Bouton Supprimer */}
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => handleDelete(user)}
+      className="opacity-0 group-hover:opacity-100 hover:bg-red-50 dark:hover:bg-red-900/20 transition-opacity"
+      title="Supprimer"
+    >
+      <Trash2 className="w-4 h-4 text-red-600" />
+    </Button>
+    
+    {/* Menu déroulant */}
+    <div className="relative inline-block">
+      <Button
+        variant="ghost"
+        size="sm"
+        className="opacity-0 group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-opacity"
+        title="Plus d'actions"
+        onClick={(e) => {
+          e.stopPropagation()
+          const menu = document.getElementById(`user-menu-${user.id}`)
+          menu?.classList.toggle('hidden')
+        }}
+      >
+        <MoreVertical className="w-4 h-4" />
+      </Button>
+      
+      <div 
+        id={`user-menu-${user.id}`}
+        className="hidden absolute right-0 z-10 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg"
+      >
+        <div className="py-1">
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(user.id.toString())
+              showSuccess('ID copié')
+              document.getElementById(`user-menu-${user.id}`).classList.add('hidden')
+            }}
+            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <Copy className="w-4 h-4 mr-2" />
+            Copier l'ID
+          </button>
+          
+          <button
+            onClick={() => {
+              if (navigator.share) {
+                navigator.share({
+                  title: user.name,
+                  text: `Contact: ${user.name} - ${user.email}`,
+                  url: window.location.href,
+                })
+              }
+              document.getElementById(`user-menu-${user.id}`).classList.add('hidden')
+            }}
+            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <Share2 className="w-4 h-4 mr-2" />
+            Partager
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -358,26 +457,35 @@ export const Users = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex space-x-1 ml-2">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => handleEdit(user)}
-                                        className="h-8 w-8 p-0"
-                                        aria-label="Modifier"
-                                    >
-                                        <Edit className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => handleDelete(user)}
-                                        className="h-8 w-8 p-0"
-                                        aria-label="Supprimer"
-                                    >
-                                        <Trash2 className="w-4 h-4 text-red-600" />
-                                    </Button>
-                                </div>
+                                <div className="flex items-center space-x-2">
+  <Button
+    variant="ghost"
+    size="sm"
+    onClick={() => handleViewUserDetails(user)}
+    className="h-10 w-10 p-0 flex items-center justify-center"
+    aria-label="Voir détails"
+  >
+    <Eye className="w-4 h-4" />
+  </Button>
+  <Button
+    variant="ghost"
+    size="sm"
+    onClick={() => handleEdit(user)}
+    className="h-10 w-10 p-0 flex items-center justify-center"
+    aria-label="Modifier"
+  >
+    <Edit className="w-4 h-4" />
+  </Button>
+  <Button
+    variant="ghost"
+    size="sm"
+    onClick={() => handleDelete(user)}
+    className="h-10 w-10 p-0 flex items-center justify-center"
+    aria-label="Supprimer"
+  >
+    <Trash2 className="w-4 h-4 text-red-600" />
+  </Button>
+</div>
                             </div>
                             <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 space-y-2">
                                 <div className="flex items-center">
@@ -543,6 +651,156 @@ export const Users = () => {
                 destructive={confirmationState.destructive}
                 isLoading={isDeleting}
             />
+            {/* Modal de détails de l'utilisateur */}
+<Modal
+  isOpen={userDetailModalOpen}
+  onClose={() => setUserDetailModalOpen(false)}
+  title="Détails de l'utilisateur"
+  size="xl"
+>
+  {viewingUser && (
+    <div className="space-y-6">
+      {/* Header avec avatar et infos */}
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="shrink-0">
+          <div className="w-32 h-32 rounded-full bg-linear-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-4xl font-bold">
+            {getInitials(viewingUser.name)}
+          </div>
+        </div>
+        
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                {viewingUser.name}
+              </h2>
+              <div className="flex items-center space-x-4 mb-4">
+                <span className="flex items-center text-gray-700 dark:text-gray-300">
+                  <Mail className="w-4 h-4 mr-2" />
+                  {viewingUser.email}
+                </span>
+                <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium">
+                  {viewingUser.company?.name}
+                </span>
+              </div>
+            </div>
+            
+            <div className="flex space-x-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleCopyUserDetails}
+                title="Copier les détails"
+              >
+                <Copy className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: viewingUser.name,
+                      text: `Contact: ${viewingUser.name} - ${viewingUser.email}`,
+                      url: window.location.href,
+                    })
+                  }
+                }}
+                title="Partager"
+              >
+                <Share2 className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+          
+          {/* Informations de base */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="flex items-center">
+              <Phone className="w-4 h-4 text-gray-400 mr-2" />
+              <span className="text-gray-700 dark:text-gray-300">{viewingUser.phone}</span>
+            </div>
+            <div className="flex items-center">
+              <Globe className="w-4 h-4 text-gray-400 mr-2" />
+              <a 
+                href={`https://${viewingUser.website}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                {viewingUser.website}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Sections détaillées */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Informations professionnelles */}
+        <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+            <Building className="w-4 h-4 mr-2" />
+            Entreprise
+          </h3>
+          <div className="space-y-3">
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Nom</span>
+              <span className="font-medium">{viewingUser.company?.name}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Slogan</span>
+              <span className="font-medium">{viewingUser.company?.catchPhrase}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Domaine</span>
+              <span className="font-medium">{viewingUser.company?.bs}</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Informations de contact */}
+        <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+            <MapPin className="w-4 h-4 mr-2" />
+            Adresse
+          </h3>
+          <div className="space-y-3">
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Rue</span>
+              <span className="font-medium">{viewingUser.address?.street}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Ville</span>
+              <span className="font-medium">{viewingUser.address?.city}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Code postal</span>
+              <span className="font-medium">{viewingUser.address?.zipcode}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Actions */}
+      <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <Button variant="ghost" onClick={() => setUserDetailModalOpen(false)}>
+          Fermer
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() => {
+            setUserDetailModalOpen(false)
+            setTimeout(() => handleEdit(viewingUser), 300)
+          }}
+          className="flex items-center gap-2"
+        >
+          <Edit className="w-4 h-4" />
+          Modifier cet utilisateur
+        </Button>
+      </div>
+    </div>
+  )}
+</Modal>
         </div>
     )
 }

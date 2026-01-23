@@ -417,3 +417,73 @@ td.break-words {
 .dark .custom-scrollbar {
   scrollbar-color: theme('colors.gray.600') theme('colors.gray.800');
 }
+
+/* Améliorations responsive pour tables */
+@media (max-width: 768px) {
+  .table-actions {
+    @apply flex flex-wrap gap-2 justify-end;
+  }
+  
+  .table-action-btn {
+    @apply min-h-[36px] min-w-[36px] flex items-center justify-center;
+  }
+}
+
+/* Styles pour les menus contextuels */
+.context-menu {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.context-menu.hidden {
+  @apply opacity-0 invisible scale-95;
+}
+
+.context-menu:not(.hidden) {
+  @apply opacity-100 visible scale-100;
+}
+
+/* Améliorations pour les cartes mobiles */
+.mobile-card {
+  @apply transition-transform duration-200 ease-in-out;
+}
+
+.mobile-card:hover {
+  @apply -translate-y-0.5;
+}
+
+/* Loaders améliorés */
+.skeleton {
+  @apply bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700;
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Transition pour les modales */
+.modal-transition {
+  @apply transition-all duration-300 ease-out;
+}
+
+.modal-enter {
+  @apply opacity-0 scale-95;
+}
+
+.modal-enter-active {
+  @apply opacity-100 scale-100;
+}
+
+.modal-exit {
+  @apply opacity-100 scale-100;
+}
+
+.modal-exit-active {
+  @apply opacity-0 scale-95;
+}

@@ -16,12 +16,13 @@ import { useConfirmation } from '../hooks/useConfirmation';
 import { useNotification } from '../hooks/useNotification';
 import Button from '../components/ui/Button'
 import Pagination from '../components/ui/Pagination'
+import ActionMenu from '../components/ui/ActionMenu'
 import SearchInput from '../components/ui/SearchInput'
 import LoadingSpinner from '../components/common/LoadingSpinner'
 import ErrorMessage from '../components/common/ErrorMessage'
 import EmptyState from '../components/common/EmptyState'
 import Modal from '../components/ui/Modal'
-import { Edit, Trash2, Star, Tag, Search, PackagePlus, PackageCheck, Image as ImageIcon, DollarSign } from 'lucide-react'
+import { Eye, Edit, Trash2, Star, Tag, Search, PackagePlus, PackageCheck, Image as ImageIcon, DollarSign, MoreVertical, Copy, Share2, Download} from 'lucide-react'
 import { ITEMS_PER_PAGE } from '../utils/constants'
 import { formatCurrency } from '../utils/helpers'
 
@@ -29,6 +30,8 @@ const Products = () => {
     const [search, setSearch] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedProduct, setSelectedProduct] = useState(null)
+    const [viewingProduct, setViewingProduct] = useState(null)
+    const [detailModalOpen, setDetailModalOpen] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
     const [formData, setFormData] = useState({
@@ -67,6 +70,24 @@ const Products = () => {
             console.error('Error loading categories:', error)
         }
     }
+    const handleViewDetails = (product) => {
+  setViewingProduct(product)
+  setDetailModalOpen(true)
+}
+
+const handleCopyDetails = () => {
+  if (viewingProduct) {
+    const details = `
+Produit: ${viewingProduct.title}
+Prix: ${formatCurrency(viewingProduct.price)}
+Catégorie: ${viewingProduct.category}
+Description: ${viewingProduct.description}
+    `.trim()
+    
+    navigator.clipboard.writeText(details)
+    showSuccess('Détails copiés dans le presse-papier')
+  }
+}
 
     const filteredProducts = useMemo(() => {
         if (!productsApi.data) return []
@@ -353,26 +374,96 @@ const Products = () => {
                                             </div>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <div className="flex justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleEdit(product)}
-                                                    className="hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                                                    title="Modifier"
-                                                >
-                                                    <Edit className="w-4 h-4" />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleDelete(product)}
-                                                    className="hover:bg-red-50 dark:hover:bg-red-900/20"
-                                                    title="Supprimer"
-                                                >
-                                                    <Trash2 className="w-4 h-4 text-red-600" />
-                                                </Button>
-                                            </div>
+                                            <div className="flex justify-end space-x-1">
+    {/* Bouton Voir - toujours visible */}
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => handleViewDetails(product)}
+      className="hover:bg-blue-50 dark:hover:bg-blue-900/20"
+      title="Voir détails"
+    >
+      <Eye className="w-4 h-4" />
+    </Button>
+    
+    {/* Bouton Modifier - visible au hover */}
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => handleEdit(product)}
+      className="opacity-0 group-hover:opacity-100 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-opacity"
+      title="Modifier"
+    >
+      <Edit className="w-4 h-4" />
+    </Button>
+    
+    {/* Bouton Supprimer - visible au hover */}
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => handleDelete(product)}
+      className="opacity-0 group-hover:opacity-100 hover:bg-red-50 dark:hover:bg-red-900/20 transition-opacity"
+      title="Supprimer"
+    >
+      <Trash2 className="w-4 h-4 text-red-600" />
+    </Button>
+    
+    {/* Menu déroulant pour actions supplémentaires */}
+    <div className="relative inline-block">
+      <Button
+        variant="ghost"
+        size="sm"
+        className="opacity-0 group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-opacity"
+        title="Plus d'actions"
+        onClick={(e) => {
+          e.stopPropagation()
+          // Ouvre un menu contextuel
+          const menu = document.getElementById(`product-menu-${product.id}`)
+          menu?.classList.toggle('hidden')
+        }}
+      >
+        <MoreVertical className="w-4 h-4" />
+      </Button>
+      
+      {/* Menu contextuel */}
+      <div 
+        id={`product-menu-${product.id}`}
+        className="hidden absolute right-0 z-10 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg"
+      >
+        <div className="py-1">
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(product.id.toString())
+              showSuccess('ID copié')
+              document.getElementById(`product-menu-${product.id}`).classList.add('hidden')
+            }}
+            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <Copy className="w-4 h-4 mr-2" />
+            Copier l'ID
+          </button>
+          
+          <button
+            onClick={() => {
+              // Simuler le partage
+              if (navigator.share) {
+                navigator.share({
+                  title: product.title,
+                  text: `Découvrez ${product.title} - ${formatCurrency(product.price)}`,
+                  url: window.location.href,
+                })
+              }
+              document.getElementById(`product-menu-${product.id}`).classList.add('hidden')
+            }}
+            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <Share2 className="w-4 h-4 mr-2" />
+            Partager
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -415,26 +506,35 @@ const Products = () => {
                                                 <Star className="w-3 h-3 text-yellow-500 fill-current mr-1" />
                                                 <span className="text-xs">{product.rating?.rate?.toFixed(1) || 'N/A'}</span>
                                             </div>
-                                            <div className="flex space-x-1">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleEdit(product)}
-                                                    className="h-8 w-8 p-0"
-                                                    aria-label="Modifier"
-                                                >
-                                                    <Edit className="w-4 h-4" />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleDelete(product)}
-                                                    className="h-8 w-8 p-0"
-                                                    aria-label="Supprimer"
-                                                >
-                                                    <Trash2 className="w-4 h-4 text-red-600" />
-                                                </Button>
-                                            </div>
+                                            <div className="flex items-center space-x-2">
+  <Button
+    variant="ghost"
+    size="sm"
+    onClick={() => handleViewDetails(product)}
+    className="h-10 w-10 p-0 flex items-center justify-center"
+    aria-label="Voir détails"
+  >
+    <Eye className="w-4 h-4" />
+  </Button>
+  <Button
+    variant="ghost"
+    size="sm"
+    onClick={() => handleEdit(product)}
+    className="h-10 w-10 p-0 flex items-center justify-center"
+    aria-label="Modifier"
+  >
+    <Edit className="w-4 h-4" />
+  </Button>
+  <Button
+    variant="ghost"
+    size="sm"
+    onClick={() => handleDelete(product)}
+    className="h-10 w-10 p-0 flex items-center justify-center"
+    aria-label="Supprimer"
+  >
+    <Trash2 className="w-4 h-4 text-red-600" />
+  </Button>
+</div>
                                         </div>
                                     </div>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">
@@ -619,6 +719,153 @@ const Products = () => {
                 destructive={confirmationState.destructive}
                 isLoading={isDeleting}
             />
+            {/* Modal de détails du produit */}
+<Modal
+  isOpen={detailModalOpen}
+  onClose={() => setDetailModalOpen(false)}
+  title="Détails du produit"
+  size="xl"
+>
+  {viewingProduct && (
+    <div className="space-y-6">
+      {/* Header avec image et titre */}
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="shrink-0">
+          <img
+            src={viewingProduct.image}
+            alt={viewingProduct.title}
+            className="w-48 h-48 md:w-64 md:h-64 object-contain bg-gray-100 dark:bg-gray-800 rounded-xl p-4"
+            onError={handleImageError}
+          />
+        </div>
+        
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                {viewingProduct.title}
+              </h2>
+              <div className="flex items-center space-x-4 mb-4">
+                <span className="text-3xl font-bold text-primary-600 dark:text-primary-400">
+                  {formatCurrency(viewingProduct.price)}
+                </span>
+                <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm font-medium">
+                  {viewingProduct.category}
+                </span>
+              </div>
+            </div>
+            
+            <div className="flex space-x-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleCopyDetails}
+                title="Copier les détails"
+              >
+                <Copy className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: viewingProduct.title,
+                      text: `Découvrez ${viewingProduct.title} - ${formatCurrency(viewingProduct.price)}`,
+                      url: window.location.href,
+                    })
+                  }
+                }}
+                title="Partager"
+              >
+                <Share2 className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+          
+          {/* Rating */}
+          <div className="flex items-center mb-6">
+            <div className="flex items-center mr-4">
+              <Star className="w-5 h-5 text-yellow-500 fill-current mr-1" />
+              <span className="font-semibold">{viewingProduct.rating?.rate?.toFixed(1) || '0.0'}</span>
+              <span className="text-gray-500 dark:text-gray-400 ml-1">
+                ({viewingProduct.rating?.count || 0} avis)
+              </span>
+            </div>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              ID: {viewingProduct.id}
+            </span>
+          </div>
+          
+          {/* Description */}
+          <div className="mb-6">
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Description</h3>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              {viewingProduct.description}
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      {/* Informations détaillées */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Caractéristiques</h3>
+          <div className="space-y-3">
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Catégorie</span>
+              <span className="font-medium">{viewingProduct.category}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Prix</span>
+              <span className="font-medium">{formatCurrency(viewingProduct.price)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Disponibilité</span>
+              <span className="text-green-600 dark:text-green-400 font-medium">En stock</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Statistiques</h3>
+          <div className="space-y-3">
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Note moyenne</span>
+              <span className="font-medium">{viewingProduct.rating?.rate?.toFixed(1) || 'N/A'}/5</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Nombre d'avis</span>
+              <span className="font-medium">{viewingProduct.rating?.count || 0}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-400">Popularité</span>
+              <span className="text-blue-600 dark:text-blue-400 font-medium">Élevée</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Actions */}
+      <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <Button variant="ghost" onClick={() => setDetailModalOpen(false)}>
+          Fermer
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() => {
+            setDetailModalOpen(false)
+            setTimeout(() => handleEdit(viewingProduct), 300)
+          }}
+          className="flex items-center gap-2"
+        >
+          <Edit className="w-4 h-4" />
+          Modifier ce produit
+        </Button>
+      </div>
+    </div>
+  )}
+</Modal>
         </div>
     )
 }
