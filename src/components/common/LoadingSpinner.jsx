@@ -1,4 +1,3 @@
-import { Loader2 } from "lucide-react";
 import clsx from "clsx";
 
 const LoadingSpinner = ({ size = 'md', fullscreen = false, text = 'Chargement...', className = '' }) => {
@@ -14,7 +13,7 @@ const LoadingSpinner = ({ size = 'md', fullscreen = false, text = 'Chargement...
 
   return (
     <div className={clsx(containerClasses, className)}>
-      <Loader2 className={`${sizeClasses[size]} animate-spin text-primary-600`} />
+      <div className={`${sizeClasses[size]} animate-spin text-primary-600 border border-t-3 border-b-3 border-primary-600 rounded-full`} />
       {text && <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">{text}</p>}
     </div>
   )
