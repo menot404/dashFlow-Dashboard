@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
 import SimpleChart from '../components/charts/SimpleChart'
 import { useApi } from '../hooks/useApi'
@@ -7,8 +7,8 @@ import { usersService } from '../services/usersService'
 import {
     Users, Package, TrendingUp, DollarSign, Calendar,
     ShoppingCart, BarChart3, Clock, Download, Filter,
-    TrendingDown, Zap, ThumbsUp,
-    Smartphone, Monitor, Tablet, Globe
+    TrendingDown, Zap, ThumbsUp, ChevronLeft, ChevronRight,
+    Smartphone, Monitor, Tablet, Globe, Menu, X
 } from 'lucide-react'
 import {
     formatCurrency,
@@ -22,35 +22,37 @@ import {
 
 // eslint-disable-next-line no-unused-vars
 const StatCard = ({ title, value, icon: Icon, change, color, loading, subtitle, trend = 'up' }) => (
-    <Card className="h-full hover:shadow-lg hover:transition-all hover:duration-300 hover:-translate-y-1 group">
+    <Card className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group">
         <CardContent className="p-4 sm:p-6">
             <div className="flex items-start justify-between">
-                <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400 truncate">{title}</p>
+                <div className="flex-1 min-w-0 pr-2">
+                    <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 truncate">{title}</p>
                     {loading ? (
-                        <div className="h-8 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mt-2" />
+                        <div className="h-7 sm:h-8 w-20 sm:w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mt-1 sm:mt-2" />
                     ) : (
                         <>
-                            <p className="text-2xl sm:text-3xl font-bold mt-2 truncate">{value}</p>
+                            <p className="text-xl sm:text-2xl md:text-3xl font-bold mt-1 sm:mt-2 truncate">{value}</p>
                             {subtitle && (
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{subtitle}</p>
+                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 truncate">{subtitle}</p>
                             )}
                             {change !== undefined && (
-                                <div className="flex items-center gap-2 mt-3">
-                                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${trend === 'up'
+                                <div className="flex items-center gap-1 sm:gap-2 mt-2 sm:mt-3">
+                                    <span className={`inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium ${trend === 'up'
                                             ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
                                             : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                                         }`}>
                                         {trend === 'up' ? '↗' : '↘'} {Math.abs(change)}%
                                     </span>
-                                    <span className="text-xs text-gray-500 transform duration-300 dark:text-gray-400">vs mois dernier</span>
+                                    <span className="text-xs text-gray-500 dark:text-gray-400 hidden xs:inline">
+                                        vs mois dernier
+                                    </span>
                                 </div>
                             )}
                         </>
                     )}
                 </div>
-                <div className={`ml-4 p-3 rounded-xl ${color} bg-opacity-10 group-hover:scale-110 transition-transform duration-300 shrink-0`}>
-                    <Icon className={`w-6 h-6 ${color}`} />
+                <div className={`ml-2 p-2 sm:p-3 rounded-lg sm:rounded-xl ${color} bg-opacity-10 group-hover:scale-110 transition-transform duration-300 shrink-0`}>
+                    <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${color}`} />
                 </div>
             </div>
         </CardContent>
@@ -67,13 +69,13 @@ const MetricBadge = ({ value, label, icon: Icon, variant = 'default' }) => {
     }
 
     return (
-        <div className="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-            <div className={`p-2 rounded-lg ${variants[variant]}`}>
-                <Icon className="w-5 h-5" />
+        <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className={`p-1.5 sm:p-2 rounded-lg ${variants[variant]}`}>
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div>
-                <p className="text-2xl font-bold">{value}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{label}</p>
+            <div className="min-w-0">
+                <p className="text-lg sm:text-xl md:text-2xl font-bold truncate">{value}</p>
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate">{label}</p>
             </div>
         </div>
     )
@@ -96,8 +98,8 @@ const DeviceIcon = ({ type }) => {
     }
 
     return (
-        <div className={`p-2 rounded-lg bg-gray-100 dark:bg-gray-800 ${colors[type]}`}>
-            <Icon className="w-5 h-5" />
+        <div className={`p-1.5 sm:p-2 rounded-lg bg-gray-100 dark:bg-gray-800 ${colors[type]}`}>
+            <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
     )
 }
@@ -121,11 +123,13 @@ export const Dashboard = () => {
     const [timeRange, setTimeRange] = useState('30d')
     const [chartType, setChartType] = useState('line')
     const [activeChart, setActiveChart] = useState('sales')
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const chartContainerRef = useRef(null)
 
     const usersApi = useApi(usersService.getUsers)
     const productsApi = useApi(productsService.getProducts)
 
-    // Génération de données simulées avec les nouvelles fonctions
+    // Génération de données simulées
     const salesData = useMemo(() => {
         const period = timeRange === '7d' ? 'daily' : timeRange === '30d' ? 'daily' : timeRange === '90d' ? 'weekly' : 'monthly'
         return generateSalesData(period)
@@ -145,7 +149,6 @@ export const Dashboard = () => {
     }, [timeRange])
 
     const userGrowthData = useMemo(() => generateUserGrowthData(), [])
-
     const performanceData = useMemo(() => generatePerformanceData(), [])
 
     const trafficData = useMemo(() => {
@@ -158,8 +161,6 @@ export const Dashboard = () => {
         return devices
     }, [])
 
-
-    // Métriques de performance
     const salesMetrics = useMemo(() => generateBusinessMetrics('sales'), [])
     const userMetrics = useMemo(() => generateBusinessMetrics('users'), [])
     const conversionMetrics = useMemo(() => generateBusinessMetrics('conversion'), [])
@@ -174,7 +175,6 @@ export const Dashboard = () => {
 
                 const totalRevenue = products.reduce((sum, product) => sum + product.price, 0) * 25
 
-                // Simuler des métriques réalistes
                 const monthlyVisitors = 12500 + Math.floor(Math.random() * 5000)
                 const bounceRate = 30 + Math.random() * 10
                 const avgSessionMinutes = 3 + Math.random() * 2
@@ -205,12 +205,12 @@ export const Dashboard = () => {
     }, [])
 
     const recentActivities = [
-        { user: 'John Doe', action: 'a ajouté un nouveau produit', time: '2 min', icon: Package, amount: '€125,99' },
-        { user: 'Jane Smith', action: 'a mis à jour le profil', time: '15 min', icon: Users, amount: null },
-        { user: 'Robert Johnson', action: 'a créé une commande', time: '1h', icon: ShoppingCart, amount: '€89,50' },
-        { user: 'Sarah Williams', action: 'a généré un rapport', time: '2h', icon: BarChart3, amount: null },
-        { user: 'Michael Brown', action: 'planifié une réunion', time: '3h', icon: Calendar, amount: null },
-        { user: 'Emily Davis', action: 'a traité un remboursement', time: '4h', icon: DollarSign, amount: '€45,00' },
+        { user: 'John Doe', action: 'a ajouté un produit', time: '2 min', icon: Package, amount: '€125,99' },
+        { user: 'Jane Smith', action: 'profil mis à jour', time: '15 min', icon: Users, amount: null },
+        { user: 'Robert Johnson', action: 'commande créée', time: '1h', icon: ShoppingCart, amount: '€89,50' },
+        { user: 'Sarah Williams', action: 'rapport généré', time: '2h', icon: BarChart3, amount: null },
+        { user: 'Michael Brown', action: 'réunion planifiée', time: '3h', icon: Calendar, amount: null },
+        { user: 'Emily Davis', action: 'remboursement traité', time: '4h', icon: DollarSign, amount: '€45,00' },
     ]
 
     const topProducts = [
@@ -228,24 +228,48 @@ export const Dashboard = () => {
         { method: 'Apple Pay', percentage: 5, color: 'bg-black' },
     ]
 
+    // Fonction pour ajuster la hauteur du graphique
+    useEffect(() => {
+        const updateChartHeight = () => {
+            if (chartContainerRef.current) {
+                const width = chartContainerRef.current.offsetWidth
+                const height = Math.max(250, Math.min(width * 0.6, 400))
+                chartContainerRef.current.style.height = `${height}px`
+            }
+        }
+
+        updateChartHeight()
+        window.addEventListener('resize', updateChartHeight)
+        return () => window.removeEventListener('resize', updateChartHeight)
+    }, [])
+
     return (
-        <div className="space-y-6">
-            {/* Header avec filtres */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Tableau de bord</h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">
-                        Aperçu global de vos performances • Mis à jour à l'instant
+        <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6">
+            {/* Header avec menu mobile */}
+            <div className="flex items-center justify-between mb-4">
+                <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className="lg:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-800"
+                >
+                    {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
+                
+                <div className="flex-1 ml-4 lg:ml-0">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                        Tableau de bord
+                    </h1>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        Aperçu global • Mis à jour à l'instant
                     </p>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="hidden sm:flex items-center gap-2">
                     <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
                         {['7d', '30d', '90d', '1a'].map(range => (
                             <button
                                 key={range}
                                 onClick={() => setTimeRange(range)}
-                                className={`px-3 py-1.5 text-sm rounded transition-colors ${timeRange === range
+                                className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded transition-colors ${timeRange === range
                                         ? 'bg-white dark:bg-gray-700 shadow text-primary-600 dark:text-primary-400 font-medium'
                                         : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400'
                                     }`}
@@ -257,25 +281,43 @@ export const Dashboard = () => {
 
                     <button
                         className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                        title="Exporter les données"
+                        title="Exporter"
                     >
-                        <Download className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                    </button>
-                    <button
-                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                        title="Filtrer les données"
-                    >
-                        <Filter className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <Download className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
                     </button>
                 </div>
             </div>
 
-            {/* Grille de statistiques principales */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Menu mobile */}
+            {isMenuOpen && (
+                <div className="lg:hidden bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 mb-4">
+                    <div className="flex flex-wrap gap-2 mb-4">
+                        {['7d', '30d', '90d', '1a'].map(range => (
+                            <button
+                                key={range}
+                                onClick={() => setTimeRange(range)}
+                                className={`px-3 py-1.5 text-sm rounded transition-colors ${timeRange === range
+                                        ? 'bg-primary-600 text-white font-medium'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                                    }`}
+                            >
+                                {range}
+                            </button>
+                        ))}
+                    </div>
+                    <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg">
+                        <Download className="w-4 h-4" />
+                        Exporter les données
+                    </button>
+                </div>
+            )}
+
+            {/* Grille de statistiques principales - Responsive */}
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <StatCard
                     title="Utilisateurs totaux"
                     value={formatNumber(stats.totalUsers)}
-                    subtitle={`+${stats.newCustomers} nouveaux ce mois`}
+                    subtitle={`+${stats.newCustomers} nouveaux`}
                     icon={Users}
                     change={8.2}
                     trend="up"
@@ -311,24 +353,26 @@ export const Dashboard = () => {
                 />
             </div>
 
-            {/* Sélecteur de graphique */}
-            <div className="flex items-center justify-between">
-                <div className="flex gap-2 overflow-x-auto pb-2">
-                    {['sales', 'revenue', 'users', 'performance'].map((chart) => (
-                        <button
-                            key={chart}
-                            onClick={() => setActiveChart(chart)}
-                            className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors ${activeChart === chart
-                                    ? 'bg-primary-600 text-white'
-                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-                                }`}
-                        >
-                            {chart === 'sales' && 'Ventes'}
-                            {chart === 'revenue' && 'Revenus'}
-                            {chart === 'users' && 'Utilisateurs'}
-                            {chart === 'performance' && 'Performance'}
-                        </button>
-                    ))}
+            {/* Contrôles graphiques */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="w-full sm:w-auto overflow-x-auto">
+                    <div className="flex gap-1 sm:gap-2 pb-2">
+                        {['sales', 'revenue', 'users', 'performance'].map((chart) => (
+                            <button
+                                key={chart}
+                                onClick={() => setActiveChart(chart)}
+                                className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors ${activeChart === chart
+                                        ? 'bg-primary-600 text-white'
+                                        : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                                    }`}
+                            >
+                                {chart === 'sales' && 'Ventes'}
+                                {chart === 'revenue' && 'Revenus'}
+                                {chart === 'users' && 'Utilisateurs'}
+                                {chart === 'performance' && 'Performance'}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
@@ -353,36 +397,39 @@ export const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Graphiques principaux */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Graphique principal dynamique */}
+            {/* Graphiques principaux avec conteneur responsive */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                {/* Graphique principal */}
                 <Card className="h-full">
-                    <CardHeader>
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <div>
-                                <CardTitle>
+                    <CardHeader className="p-4 sm:p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div className="min-w-0">
+                                <CardTitle className="text-lg sm:text-xl">
                                     {activeChart === 'sales' && 'Vue d\'ensemble des ventes'}
                                     {activeChart === 'revenue' && 'Revenus générés'}
                                     {activeChart === 'users' && 'Croissance des utilisateurs'}
                                     {activeChart === 'performance' && 'Performance par canal'}
                                 </CardTitle>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 truncate">
                                     {activeChart === 'sales' && 'Performances sur les derniers mois'}
-                                    {activeChart === 'revenue' && 'Évolution des revenus sur la période sélectionnée'}
-                                    {activeChart === 'users' && 'Tendance d\'acquisition des utilisateurs'}
+                                    {activeChart === 'revenue' && 'Évolution des revenus'}
+                                    {activeChart === 'users' && 'Tendance d\'acquisition'}
                                     {activeChart === 'performance' && 'Distribution par canal de vente'}
                                 </p>
                             </div>
-                            <div className="text-sm font-medium text-green-600 dark:text-green-400">
-                                {activeChart === 'sales' && `+${salesMetrics.growth}% vs période précédente`}
-                                {activeChart === 'revenue' && `+${salesMetrics.growth}% vs période précédente`}
-                                {activeChart === 'users' && `+${userMetrics.growth}% vs période précédente`}
+                            <div className="text-sm font-medium text-green-600 dark:text-green-400 shrink-0">
+                                {activeChart === 'sales' && `+${salesMetrics.growth}%`}
+                                {activeChart === 'revenue' && `+${salesMetrics.growth}%`}
+                                {activeChart === 'users' && `+${userMetrics.growth}%`}
                                 {activeChart === 'performance' && `Objectif: ${conversionMetrics.target}%`}
                             </div>
                         </div>
                     </CardHeader>
-                    <CardContent>
-                        <div className="h-80">
+                    <CardContent className="p-4 sm:p-6 pt-0">
+                        <div 
+                            ref={chartContainerRef}
+                            className="w-full min-h-62.5 max-h-100 overflow-hidden"
+                        >
                             <SimpleChart
                                 data={
                                     activeChart === 'sales' ? salesData :
@@ -392,7 +439,8 @@ export const Dashboard = () => {
                                 }
                                 type={chartType}
                                 title=""
-                                height={300}
+                                responsive={true}
+                                maintainAspectRatio={false}
                                 color={
                                     activeChart === 'sales' ? 'primary' :
                                         activeChart === 'revenue' ? 'success' :
@@ -406,30 +454,33 @@ export const Dashboard = () => {
                     </CardContent>
                 </Card>
 
-                {/* Deuxième graphique ou métriques */}
+                {/* Distribution du trafic */}
                 <Card className="h-full">
-                    <CardHeader>
+                    <CardHeader className="p-4 sm:p-6">
                         <div className="flex items-center justify-between">
-                            <CardTitle>Distribution du trafic</CardTitle>
-                            <Globe className="w-5 h-5 text-gray-400" />
+                            <div className="min-w-0">
+                                <CardTitle className="text-lg sm:text-xl">Distribution du trafic</CardTitle>
+                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                    Répartition par type d'appareil
+                                </p>
+                            </div>
+                            <Globe className="w-5 h-5 text-gray-400 shrink-0" />
                         </div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            Répartition par type d'appareil
-                        </p>
                     </CardHeader>
-                    <CardContent>
-                        <div className="space-y-6">
-                            {/* Barres horizontales pour les appareils */}
+                    <CardContent className="p-4 sm:p-6 pt-0">
+                        <div className="space-y-4 sm:space-y-6">
                             {trafficData.map((device, index) => (
                                 <div key={index} className="space-y-2">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                                             <DeviceIcon type={device.type} />
-                                            <span className="font-medium">{device.label}</span>
+                                            <span className="font-medium text-sm sm:text-base truncate">
+                                                {device.label}
+                                            </span>
                                         </div>
-                                        <div className="text-right">
-                                            <span className="font-bold">{device.value}%</span>
-                                            <span className="text-xs text-gray-500 ml-2">
+                                        <div className="text-right shrink-0 ml-2">
+                                            <span className="font-bold text-sm sm:text-base">{device.value}%</span>
+                                            <span className="text-xs text-gray-500 ml-1 sm:ml-2 hidden xs:inline">
                                                 {device.value > 60 ? '↗ Dominant' : device.value > 30 ? '→ Stable' : '↘ Secondaire'}
                                             </span>
                                         </div>
@@ -448,30 +499,30 @@ export const Dashboard = () => {
                             ))}
 
                             {/* Métriques de trafic */}
-                            <div className="grid grid-cols-2 gap-4 pt-4 border-t dark:border-gray-700">
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t dark:border-gray-700">
                                 <div className="text-center">
-                                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
                                         {formatNumber(stats.monthlyVisitors)}
                                     </p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Visites/mois</p>
+                                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Visites/mois</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
                                         {stats.bounceRate}%
                                     </p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Taux de rebond</p>
+                                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Rebond</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
                                         {stats.avgSessionDuration}
                                     </p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Durée moyenne</p>
+                                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Durée</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    <p className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
                                         {formatNumber(stats.newCustomers)}
                                     </p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">Nouveaux clients</p>
+                                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Nouveaux</p>
                                 </div>
                             </div>
                         </div>
@@ -480,39 +531,41 @@ export const Dashboard = () => {
             </div>
 
             {/* Deuxième ligne - Tableau et métriques */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
                 {/* Top produits */}
                 <Card className="lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle>Top produits</CardTitle>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    <CardHeader className="p-4 sm:p-6">
+                        <CardTitle className="text-lg sm:text-xl">Top produits</CardTitle>
+                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
                             Meilleurs vendeurs du mois
                         </p>
                     </CardHeader>
-                    <CardContent>
-                        <div className="space-y-4">
+                    <CardContent className="p-4 sm:p-6 pt-0">
+                        <div className="space-y-3 sm:space-y-4">
                             {topProducts.map((product, index) => (
                                 <div
                                     key={index}
-                                    className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors group"
+                                    className="flex items-center justify-between p-3 sm:p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg sm:rounded-xl transition-colors"
                                 >
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-lg bg-linear-to-br from-blue-100 to-blue-200 dark:from-blue-900/20 dark:to-blue-800/20 flex items-center justify-center">
-                                            <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-linear-to-br from-blue-100 to-blue-200 dark:from-blue-900/20 dark:to-blue-800/20 flex items-center justify-center shrink-0">
+                                            <span className="text-sm sm:text-base font-bold text-blue-600 dark:text-blue-400">
                                                 #{index + 1}
                                             </span>
                                         </div>
                                         <div className="min-w-0">
-                                            <p className="font-medium truncate">{product.name}</p>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">{product.category}</p>
+                                            <p className="font-medium text-sm sm:text-base truncate">{product.name}</p>
+                                            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 truncate">
+                                                {product.category}
+                                            </p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-6">
+                                    <div className="flex items-center gap-3 sm:gap-6 shrink-0">
                                         <div className="text-right">
-                                            <p className="font-bold">{product.revenue}</p>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">{product.sales} ventes</p>
+                                            <p className="font-bold text-sm sm:text-base">{product.revenue}</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">{product.sales} ventes</p>
                                         </div>
-                                        <div className={`px-3 py-1 rounded-full text-sm font-medium ${product.growth > 20
+                                        <div className={`px-2 py-1 rounded-full text-xs font-medium ${product.growth > 20
                                                 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
                                                 : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
                                             }`}>
@@ -526,16 +579,16 @@ export const Dashboard = () => {
                 </Card>
 
                 {/* Métriques de performance */}
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                     <Card>
-                        <CardHeader>
-                            <CardTitle>Performance clés</CardTitle>
+                        <CardHeader className="p-4 sm:p-6">
+                            <CardTitle className="text-lg sm:text-xl">Performance clés</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <div className="space-y-6">
+                        <CardContent className="p-4 sm:p-6 pt-0">
+                            <div className="space-y-4 sm:space-y-6">
                                 <div>
                                     <div className="flex justify-between text-sm mb-2">
-                                        <span className="text-gray-600 dark:text-gray-400">Taux de conversion</span>
+                                        <span className="text-gray-600 dark:text-gray-400">Conversion</span>
                                         <span className="font-bold">{stats.conversion.toFixed(1)}%</span>
                                     </div>
                                     <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -548,7 +601,7 @@ export const Dashboard = () => {
 
                                 <div>
                                     <div className="flex justify-between text-sm mb-2">
-                                        <span className="text-gray-600 dark:text-gray-400">Satisfaction client</span>
+                                        <span className="text-gray-600 dark:text-gray-400">Satisfaction</span>
                                         <span className="font-bold">{stats.customerSatisfaction.toFixed(1)}/5</span>
                                     </div>
                                     <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -561,7 +614,7 @@ export const Dashboard = () => {
 
                                 <div>
                                     <div className="flex justify-between text-sm mb-2">
-                                        <span className="text-gray-600 dark:text-gray-400">Valeur moyenne panier</span>
+                                        <span className="text-gray-600 dark:text-gray-400">Panier moyen</span>
                                         <span className="font-bold">{formatCurrency(stats.avgOrderValue)}</span>
                                     </div>
                                     <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -577,18 +630,18 @@ export const Dashboard = () => {
 
                     {/* Méthodes de paiement */}
                     <Card>
-                        <CardHeader>
-                            <CardTitle>Méthodes de paiement</CardTitle>
+                        <CardHeader className="p-4 sm:p-6">
+                            <CardTitle className="text-lg sm:text-xl">Méthodes de paiement</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <div className="space-y-3">
+                        <CardContent className="p-4 sm:p-6 pt-0">
+                            <div className="space-y-2 sm:space-y-3">
                                 {paymentMethods.map((method, index) => (
                                     <div key={index} className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-3 h-3 rounded-full ${method.color}`} />
-                                            <span className="text-sm">{method.method}</span>
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${method.color}`} />
+                                            <span className="text-sm truncate">{method.method}</span>
                                         </div>
-                                        <span className="font-medium">{method.percentage}%</span>
+                                        <span className="font-medium text-sm sm:text-base">{method.percentage}%</span>
                                     </div>
                                 ))}
                             </div>
@@ -599,32 +652,34 @@ export const Dashboard = () => {
 
             {/* Activités récentes */}
             <Card>
-                <CardHeader>
+                <CardHeader className="p-4 sm:p-6">
                     <div className="flex items-center justify-between">
                         <div>
-                            <CardTitle>Activité récente</CardTitle>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            <CardTitle className="text-lg sm:text-xl">Activité récente</CardTitle>
+                            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
                                 Dernières actions sur la plateforme
                             </p>
                         </div>
                         <Clock className="w-5 h-5 text-gray-400" />
                     </div>
                 </CardHeader>
-                <CardContent>
-                    <div className="space-y-3">
+                <CardContent className="p-4 sm:p-6 pt-0">
+                    <div className="space-y-2 sm:space-y-3">
                         {recentActivities.map((activity, index) => (
                             <div
                                 key={index}
-                                className="flex items-center p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-colors group"
+                                className="flex items-center p-3 sm:p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg sm:rounded-xl transition-colors"
                             >
-                                <div className="shrink-0 mr-4">
-                                    <div className="w-12 h-12 rounded-full bg-linear-to-br from-primary-100 to-primary-200 dark:from-primary-900/20 dark:to-primary-800/20 flex items-center justify-center">
-                                        <activity.icon className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                                <div className="shrink-0 mr-3 sm:mr-4">
+                                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-linear-to-br from-primary-100 to-primary-200 dark:from-primary-900/20 dark:to-primary-800/20 flex items-center justify-center">
+                                        <activity.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600 dark:text-primary-400" />
                                     </div>
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                                        {activity.user} <span className="font-normal text-gray-600 dark:text-gray-400">{activity.action}</span>
+                                        <span className="font-normal text-gray-600 dark:text-gray-400">
+                                            {activity.user}
+                                        </span> {activity.action}
                                     </p>
                                     {activity.amount && (
                                         <p className="text-sm font-bold text-green-600 dark:text-green-400 mt-1">
@@ -632,8 +687,8 @@ export const Dashboard = () => {
                                         </p>
                                     )}
                                 </div>
-                                <div className="shrink-0 ml-4">
-                                    <span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-full">
+                                <div className="shrink-0 ml-2 sm:ml-4">
+                                    <span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full">
                                         {activity.time}
                                     </span>
                                 </div>
@@ -643,8 +698,8 @@ export const Dashboard = () => {
                 </CardContent>
             </Card>
 
-            {/* Métriques additionnelles en bas */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {/* Métriques additionnelles */}
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                 <MetricBadge
                     value={`${stats.bounceRate}%`}
                     label="Taux de rebond"
