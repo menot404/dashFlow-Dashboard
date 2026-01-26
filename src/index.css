@@ -358,110 +358,129 @@ td.break-words {
 
 /* Animations */
 @keyframes slide-in {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
 }
 
 .animate-slide-in {
-  animation: slide-in 0.3s ease-out;
+    animation: slide-in 0.3s ease-out;
 }
 
 .animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* Améliorations de table */
 .striped-table tbody tr:nth-child(even) {
-  @apply bg-gray-50 dark:bg-gray-800/50;
+    @apply bg-gray-50 dark:bg-gray-800/50;
 }
 
 .hoverable-table tbody tr {
-  @apply transition-colors duration-150;
+    @apply transition-colors duration-150;
 }
 
 .hoverable-table tbody tr:hover {
-  @apply bg-gray-100 dark:bg-gray-700;
+    @apply bg-gray-100 dark:bg-gray-700;
 }
 
 /* Focus visible amélioré */
 :focus-visible {
-  @apply outline-2 outline-primary-500 outline-offset-2;
+    @apply outline-2 outline-primary-500 outline-offset-2;
 }
 
 /* Scrollbar personnalisée */
 .custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: theme('colors.gray.400') theme('colors.gray.100');
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.gray.400') theme('colors.gray.100');
 }
 
 .dark .custom-scrollbar {
-  scrollbar-color: theme('colors.gray.600') theme('colors.gray.800');
+    scrollbar-color: theme('colors.gray.600') theme('colors.gray.800');
 }
 
 /* Améliorations responsive pour tables */
 @media (max-width: 768px) {
-  .table-actions {
-    @apply flex flex-wrap gap-2 justify-end;
-  }
-  
-  .table-action-btn {
-    @apply min-h-[36px] min-w-[36px] flex items-center justify-center;
-  }
+    .table-actions {
+        @apply flex flex-wrap gap-2 justify-end;
+    }
+
+    .table-action-btn {
+        @apply min-h-[36px] min-w-[36px] flex items-center justify-center;
+    }
 }
 
 /* Styles pour les menus contextuels */
 .context-menu {
-  @apply transition-all duration-200 ease-in-out;
+    @apply transition-all duration-200 ease-in-out;
 }
 
 .context-menu.hidden {
-  @apply opacity-0 invisible scale-95;
+    @apply opacity-0 invisible scale-95;
 }
 
 .context-menu:not(.hidden) {
-  @apply opacity-100 visible scale-100;
+    @apply opacity-100 visible scale-100;
 }
 
 /* Améliorations pour les cartes mobiles */
 .mobile-card {
-  @apply transition-transform duration-200 ease-in-out;
+    @apply transition-transform duration-200 ease-in-out;
 }
 
 .mobile-card:hover {
-  @apply -translate-y-0.5;
+    @apply -translate-y-0.5;
 }
+
 /* Transition pour les modales */
 .modal-transition {
-  @apply transition-all duration-300 ease-out;
+    @apply transition-all duration-300 ease-out;
 }
 
 .modal-enter {
-  @apply opacity-0 scale-95;
+    @apply opacity-0 scale-95;
 }
 
 .modal-enter-active {
-  @apply opacity-100 scale-100;
+    @apply opacity-100 scale-100;
 }
 
 .modal-exit {
-  @apply opacity-100 scale-100;
+    @apply opacity-100 scale-100;
 }
 
 .modal-exit-active {
-  @apply opacity-0 scale-95;
+    @apply opacity-0 scale-95;
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slide-up 0.3s ease-out;
 }

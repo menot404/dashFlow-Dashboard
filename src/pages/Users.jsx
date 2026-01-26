@@ -649,7 +649,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                     showHeader={true}
                     padding="default"
                 >
-                    <div className="max-h-[60vh] sm:max-h-100 overflow-y-auto p-2">
+                    <div className="max-h-[70vh] sm:max-h-96 overflow-y-auto px-2 py-15 sm:py-2">
                         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 pb-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                                 <div className="space-y-2">
@@ -756,7 +756,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                     variant="outline"
                                     onClick={handleCancel}
                                     disabled={isSaving}
-                                    className="w-full sm:w-auto order-2 sm:order-1"
+                                    className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                 >
                                     Annuler
                                 </Button>
@@ -795,7 +795,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                     showHeader={true}
                     padding="default"
                 >
-                    <div className="max-h-[60vh] sm:max-h-100 overflow-y-auto p-2">
+                    <div className="max-h-[70vh] sm:max-h-96 overflow-y-auto px-2 py-15 sm:py-2">
                         {viewingUser && (
                             <div className="space-y-6 pb-4">
                                 {/* Header avec avatar et infos */}
@@ -1002,7 +1002,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                     <Button
                                         variant="outline"
                                         onClick={() => setUserDetailModalOpen(false)}
-                                        className="w-full sm:w-auto order-2 sm:order-1"
+                                        className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                     >
                                         Fermer
                                     </Button>
@@ -1013,7 +1013,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                                 setUserDetailModalOpen(false)
                                                 setTimeout(() => handleDelete(viewingUser), 300)
                                             }}
-                                            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 w-full sm:w-auto"
+                                            className="w-full sm:w-auto px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg flex items-center justify-center gap-2 transition-colors"
                                         >
                                             <Trash2 className="w-4 h-4 mr-2" />
                                             <span className="hidden sm:inline">Supprimer</span>

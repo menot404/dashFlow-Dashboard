@@ -23,18 +23,18 @@ const NotFound = () => {
             </div>
             <div className="absolute inset-0 bg-linear-to-r from-red-500/20 to-orange-500/20 dark:from-red-600/30 dark:to-orange-600/30 blur-3xl" />
           </div>
-          
+
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Page introuvable
           </h1>
-          
+
           <div className="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-800 rounded-full mb-6">
             <Search className="w-4 h-4 mr-2 text-gray-600 dark:text-gray-400" />
             <code className="text-sm font-mono text-gray-700 dark:text-gray-300 break-all">
               {location.pathname}
             </code>
           </div>
-          
+
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             La page que vous recherchez n'existe pas ou a été déplacée.
             Voici quelques alternatives qui pourraient vous être utiles.
@@ -71,7 +71,7 @@ const NotFound = () => {
             <RefreshCw className="w-4 h-4" />
             Retour en arrière
           </Button>
-          
+
           <Button
             as={Link}
             to="/"

@@ -103,10 +103,10 @@ const Register = () => {
                                         value={formData.name}
                                         onChange={handleInputChange}
                                         className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg
-                                                  bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                                  focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                                                  text-sm sm:text-base
-                                                  placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                                                    bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                                    focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                                                    text-sm sm:text-base
+                                                    placeholder:text-gray-400 dark:placeholder:text-gray-500"
                                         placeholder="John Doe"
                                         required
                                         autoComplete="name"
@@ -126,10 +126,10 @@ const Register = () => {
                                         value={formData.email}
                                         onChange={handleInputChange}
                                         className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg
-                                                  bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                                  focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                                                  text-sm sm:text-base
-                                                  placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                                                    bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                                    focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                                                    text-sm sm:text-base
+                                                    placeholder:text-gray-400 dark:placeholder:text-gray-500"
                                         placeholder="admin@example.com"
                                         required
                                         autoComplete="email"
@@ -149,10 +149,10 @@ const Register = () => {
                                         value={formData.password}
                                         onChange={handleInputChange}
                                         className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg
-                                                  bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                                  focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                                                  text-sm sm:text-base
-                                                  placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                                                    bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                                    focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                                                    text-sm sm:text-base
+                                                    placeholder:text-gray-400 dark:placeholder:text-gray-500"
                                         placeholder="••••••••"
                                         required
                                         autoComplete="new-password"
@@ -172,10 +172,10 @@ const Register = () => {
                                         value={formData.confirmPassword}
                                         onChange={handleInputChange}
                                         className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg
-                                                  bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                                  focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                                                  text-sm sm:text-base
-                                                  placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                                                    bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                                    focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                                                    text-sm sm:text-base
+                                                    placeholder:text-gray-400 dark:placeholder:text-gray-500"
                                         placeholder="••••••••"
                                         required
                                         autoComplete="new-password"

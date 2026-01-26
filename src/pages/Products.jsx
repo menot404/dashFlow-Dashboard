@@ -418,7 +418,7 @@ Description: ${viewingProduct.description}
                         </button>
 
                         {isFilterOpen && (
-                            <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50 p-4">
+                            <div className="absolute left-50 transform -translate-x-1/2 sm:left-auto sm:transform-none  mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50 p-4">
                                 <div className="space-y-4">
                                     <div>
                                         <h3 className="font-semibold text-sm text-gray-900 dark:text-white mb-2">Catégories</h3>
@@ -815,146 +815,153 @@ Description: ${viewingProduct.description}
                 size="lg"
                 className="p-4 sm:p-6"
             >
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Nom du produit *
-                            </label>
-                            <input
-                                type="text"
-                                value={formData.title}
-                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
+                <div className='max-h-[70vh] sm:max-h-96 overflow-y-auto px-2 py-15 sm:py-2'>
+
+                    <div className='pb-4'>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Nom du produit *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={formData.title}
+                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
                                     bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
                                     focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                placeholder="Nom du produit"
-                                required
-                                autoFocus
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Prix (€) *
-                            </label>
-                            <div className="relative">
-                                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    min="0"
-                                    value={formData.price}
-                                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                                    className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    placeholder="19.99"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Catégorie *
-                            </label>
-                            <div className="relative">
-                                <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                                <select
-                                    value={formData.category}
-                                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                    className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    required
-                                >
-                                    <option value="">Sélectionner une catégorie</option>
-                                    {categories.map((category) => (
-                                        <option key={category} value={category}>
-                                            {category.charAt(0).toUpperCase() + category.slice(1)}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Description *
-                            </label>
-                            <textarea
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                rows="3"
-                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                                    bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                    focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                placeholder="Description détaillée du produit..."
-                                required
-                            />
-                        </div>
-
-                        <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                URL de l'image
-                            </label>
-                            <div className="relative">
-                                <ImageIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                                <input
-                                    type="url"
-                                    value={formData.image}
-                                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                                    className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    placeholder="https://example.com/image.jpg"
-                                />
-                            </div>
-                            {formData.image && (
-                                <div className="mt-2">
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Aperçu :</p>
-                                    <img
-                                        src={formData.image}
-                                        alt="Aperçu"
-                                        className="w-32 h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
-                                        onError={handleImageError}
+                                        placeholder="Nom du produit"
+                                        required
+                                        autoFocus
                                     />
                                 </div>
-                            )}
-                        </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Prix (€) *
+                                    </label>
+                                    <div className="relative">
+                                        <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                        <input
+                                            type="number"
+                                            step="0.01"
+                                            min="0"
+                                            value={formData.price}
+                                            onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                                            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
+                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                            placeholder="19.99"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Catégorie *
+                                    </label>
+                                    <div className="relative">
+                                        <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                        <select
+                                            value={formData.category}
+                                            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
+                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                            required
+                                        >
+                                            <option value="">Sélectionner une catégorie</option>
+                                            {categories.map((category) => (
+                                                <option key={category} value={category}>
+                                                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Description *
+                                    </label>
+                                    <textarea
+                                        value={formData.description}
+                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                        rows="3"
+                                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
+                                    bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                    focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                        placeholder="Description détaillée du produit..."
+                                        required
+                                    />
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        URL de l'image
+                                    </label>
+                                    <div className="relative">
+                                        <ImageIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                        <input
+                                            type="url"
+                                            value={formData.image}
+                                            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                                            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
+                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                            placeholder="https://example.com/image.jpg"
+                                        />
+                                    </div>
+                                    {formData.image && (
+                                        <div className="mt-2">
+                                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Aperçu :</p>
+                                            <img
+                                                src={formData.image}
+                                                alt="Aperçu"
+                                                className="w-32 h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                                                onError={handleImageError}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <button
+                                    type="button"
+                                    onClick={handleCancel}
+                                    disabled={isSaving}
+                                    className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                    Annuler
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={isSaving}
+                                    className="w-full sm:w-auto px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg flex items-center justify-center gap-2 transition-colors"
+                                >
+                                    {isSaving ? (
+                                        'Chargement...'
+                                    ) : selectedProduct ? (
+                                        <>
+                                            <PackageCheck className="w-4 h-4" />
+                                            Mettre à jour
+                                        </>
+                                    ) : (
+                                        <>
+                                            <PackagePlus className="w-4 h-4" />
+                                            Créer le produit
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </form>
+
                     </div>
 
-                    <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <button
-                            type="button"
-                            onClick={handleCancel}
-                            disabled={isSaving}
-                            className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                        >
-                            Annuler
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={isSaving}
-                            className="w-full sm:w-auto px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg flex items-center justify-center gap-2 transition-colors"
-                        >
-                            {isSaving ? (
-                                'Chargement...'
-                            ) : selectedProduct ? (
-                                <>
-                                    <PackageCheck className="w-4 h-4" />
-                                    Mettre à jour
-                                </>
-                            ) : (
-                                <>
-                                    <PackagePlus className="w-4 h-4" />
-                                    Créer le produit
-                                </>
-                            )}
-                        </button>
-                    </div>
-                </form>
+                </div>
             </Modal>
 
             {/* Modal de confirmation */}
@@ -979,144 +986,146 @@ Description: ${viewingProduct.description}
                 size="xl"
                 className="p-4 sm:p-6"
             >
-                {viewingProduct && (
-                    <div className="space-y-6">
-                        <div className="flex flex-col md:flex-row gap-6">
-                            <div className="shrink-0 flex justify-center">
-                                <img
-                                    src={viewingProduct.image}
-                                    alt={viewingProduct.title}
-                                    className="w-full max-w-xs md:w-64 md:h-64 object-contain bg-gray-100 dark:bg-gray-800 rounded-xl p-4"
-                                    onError={handleImageError}
-                                />
-                            </div>
+                <div className="max-h-[70vh] sm:max-h-95 overflow-y-auto px-2 py-15 sm:py-2">
+                    {viewingProduct && (
+                        <div className="space-y-6">
+                            <div className="flex flex-col md:flex-row gap-6">
+                                <div className="shrink-0 flex justify-center">
+                                    <img
+                                        src={viewingProduct.image}
+                                        alt={viewingProduct.title}
+                                        className="w-full max-w-xs md:w-64 md:h-64 object-contain bg-gray-100 dark:bg-gray-800 rounded-xl p-4"
+                                        onError={handleImageError}
+                                    />
+                                </div>
 
-                            <div className="flex-1">
-                                <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-                                    <div className="flex-1">
-                                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                                            {viewingProduct.title}
-                                        </h2>
-                                        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
-                                            <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                                                {formatCurrency(viewingProduct.price)}
-                                            </span>
-                                            <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm font-medium capitalize">
-                                                {viewingProduct.category}
-                                            </span>
+                                <div className="flex-1">
+                                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                                        <div className="flex-1">
+                                            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                                {viewingProduct.title}
+                                            </h2>
+                                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+                                                <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                                                    {formatCurrency(viewingProduct.price)}
+                                                </span>
+                                                <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm font-medium capitalize">
+                                                    {viewingProduct.category}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex space-x-2">
+                                            <button
+                                                onClick={handleCopyDetails}
+                                                className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                title="Copier les détails"
+                                            >
+                                                <Copy className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    if (navigator.share) {
+                                                        navigator.share({
+                                                            title: viewingProduct.title,
+                                                            text: `Découvrez ${viewingProduct.title} - ${formatCurrency(viewingProduct.price)}`,
+                                                            url: window.location.href,
+                                                        })
+                                                    }
+                                                }}
+                                                className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                title="Partager"
+                                            >
+                                                <Share2 className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     </div>
 
-                                    <div className="flex space-x-2">
-                                        <button
-                                            onClick={handleCopyDetails}
-                                            className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                                            title="Copier les détails"
-                                        >
-                                            <Copy className="w-4 h-4" />
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                if (navigator.share) {
-                                                    navigator.share({
-                                                        title: viewingProduct.title,
-                                                        text: `Découvrez ${viewingProduct.title} - ${formatCurrency(viewingProduct.price)}`,
-                                                        url: window.location.href,
-                                                    })
-                                                }
-                                            }}
-                                            className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                                            title="Partager"
-                                        >
-                                            <Share2 className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* Rating */}
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
-                                    <div className="flex items-center">
-                                        <Star className="w-5 h-5 text-yellow-500 fill-current mr-1" />
-                                        <span className="font-semibold">{viewingProduct.rating?.rate?.toFixed(1) || '0.0'}</span>
-                                        <span className="text-gray-500 dark:text-gray-400 ml-1">
-                                            ({viewingProduct.rating?.count || 0} avis)
+                                    {/* Rating */}
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
+                                        <div className="flex items-center">
+                                            <Star className="w-5 h-5 text-yellow-500 fill-current mr-1" />
+                                            <span className="font-semibold">{viewingProduct.rating?.rate?.toFixed(1) || '0.0'}</span>
+                                            <span className="text-gray-500 dark:text-gray-400 ml-1">
+                                                ({viewingProduct.rating?.count || 0} avis)
+                                            </span>
+                                        </div>
+                                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                                            ID: #{viewingProduct.id}
                                         </span>
                                     </div>
-                                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                                        ID: #{viewingProduct.id}
-                                    </span>
-                                </div>
 
-                                {/* Description */}
-                                <div className="mb-6">
-                                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Description</h3>
-                                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                                        {viewingProduct.description}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Informations détaillées */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Caractéristiques</h3>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600 dark:text-gray-400">Catégorie</span>
-                                        <span className="font-medium capitalize">{viewingProduct.category}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600 dark:text-gray-400">Prix</span>
-                                        <span className="font-medium">{formatCurrency(viewingProduct.price)}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600 dark:text-gray-400">Disponibilité</span>
-                                        <span className="text-green-600 dark:text-green-400 font-medium">En stock</span>
+                                    {/* Description */}
+                                    <div className="mb-6">
+                                        <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Description</h3>
+                                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                            {viewingProduct.description}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
-                                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Statistiques</h3>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600 dark:text-gray-400">Note moyenne</span>
-                                        <span className="font-medium">{viewingProduct.rating?.rate?.toFixed(1) || 'N/A'}/5</span>
+                            {/* Informations détaillées */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
+                                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Caractéristiques</h3>
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-600 dark:text-gray-400">Catégorie</span>
+                                            <span className="font-medium capitalize">{viewingProduct.category}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-600 dark:text-gray-400">Prix</span>
+                                            <span className="font-medium">{formatCurrency(viewingProduct.price)}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-600 dark:text-gray-400">Disponibilité</span>
+                                            <span className="text-green-600 dark:text-green-400 font-medium">En stock</span>
+                                        </div>
                                     </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600 dark:text-gray-400">Nombre d'avis</span>
-                                        <span className="font-medium">{viewingProduct.rating?.count || 0}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600 dark:text-gray-400">Popularité</span>
-                                        <span className="text-blue-600 dark:text-blue-400 font-medium">Élevée</span>
+                                </div>
+
+                                <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
+                                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Statistiques</h3>
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-600 dark:text-gray-400">Note moyenne</span>
+                                            <span className="font-medium">{viewingProduct.rating?.rate?.toFixed(1) || 'N/A'}/5</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-600 dark:text-gray-400">Nombre d'avis</span>
+                                            <span className="font-medium">{viewingProduct.rating?.count || 0}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-600 dark:text-gray-400">Popularité</span>
+                                            <span className="text-blue-600 dark:text-blue-400 font-medium">Élevée</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Actions */}
-                        <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-                            <button
-                                onClick={() => setDetailModalOpen(false)}
-                                className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                            >
-                                Fermer
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setDetailModalOpen(false)
-                                    setTimeout(() => handleEdit(viewingProduct), 300)
-                                }}
-                                className="w-full sm:w-auto px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg flex items-center justify-center gap-2 transition-colors"
-                            >
-                                <Edit className="w-4 h-4" />
-                                Modifier ce produit
-                            </button>
+                            {/* Actions */}
+                            <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+                                <button
+                                    onClick={() => setDetailModalOpen(false)}
+                                    className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                    Fermer
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setDetailModalOpen(false)
+                                        setTimeout(() => handleEdit(viewingProduct), 300)
+                                    }}
+                                    className="w-full sm:w-auto px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg flex items-center justify-center gap-2 transition-colors"
+                                >
+                                    <Edit className="w-4 h-4" />
+                                    Modifier ce produit
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </Modal>
         </div>
     )
