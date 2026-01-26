@@ -46,7 +46,7 @@ const Login = () => {
     const handleDemoLogin = async () => {
         setEmail('admin@example.com')
         setPassword('admin123')
-        
+
         try {
             setLoading(true)
             await login('admin@example.com', 'admin123', false)
@@ -60,12 +60,12 @@ const Login = () => {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-50 dark:from-gray-900 dark:to-gray-800 p-3 sm:p-4">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-gray-50 dark:from-gray-900 dark:to-gray-800 p-3 sm:p-4">
             <div className="w-full max-w-md mx-auto">
                 {/* En-tête */}
                 <div className="text-center mb-6 sm:mb-8">
                     <div className="flex justify-center mb-3 sm:mb-4">
-                        <div className="p-3 sm:p-4 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 shadow-lg">
+                        <div className="p-3 sm:p-4 rounded-xl bg-linear-to-r from-primary-500 to-primary-600 shadow-lg">
                             <Shield className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                         </div>
                     </div>
@@ -90,7 +90,7 @@ const Login = () => {
                             {/* Message d'erreur */}
                             {error && (
                                 <div className="flex items-start p-3 sm:p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg">
-                                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mr-2 mt-0.5 flex-shrink-0" />
+                                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mr-2 mt-0.5 shrink-0" />
                                     <span className="text-sm text-red-700 dark:text-red-300">{error}</span>
                                 </div>
                             )}
@@ -188,7 +188,7 @@ const Login = () => {
                                     type="button"
                                     onClick={handleDemoLogin}
                                     disabled={loading}
-                                    className="w-full py-2.5 sm:py-3 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 
+                                    className="w-full py-2.5 sm:py-3 bg-linear-to-r from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 
                                         border border-blue-200 dark:border-blue-700 text-blue-600 dark:text-blue-400 
                                         rounded-lg font-medium hover:from-blue-100 hover:to-blue-200 dark:hover:from-blue-800/40 dark:hover:to-blue-700/40
                                         transition-all duration-200 text-sm sm:text-base flex items-center justify-center gap-2"
@@ -204,7 +204,7 @@ const Login = () => {
                             <Button
                                 type="submit"
                                 loading={loading}
-                                className="w-full py-3 sm:py-4 text-sm sm:text-base font-medium bg-gradient-to-r from-primary-600 to-primary-700 
+                                className="w-full py-3 sm:py-4 text-sm sm:text-base font-medium bg-linear-to-r from-primary-600 to-primary-700 
                                     hover:from-primary-700 hover:to-primary-800 shadow-lg hover:shadow-xl
                                     transition-all duration-300 flex items-center justify-center gap-2"
                             >
@@ -225,7 +225,7 @@ const Login = () => {
                                             politique de confidentialité
                                         </Link>
                                     </p>
-                                    
+
                                     <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                                         <span className="text-gray-500 dark:text-gray-400">Pas encore de compte ? </span>
                                         <Link
@@ -266,8 +266,8 @@ const Login = () => {
                 </div>
 
                 {/* Design elements décoratifs */}
-                <div className="fixed top-0 left-0 right-0 h-40 bg-gradient-to-r from-primary-500/10 to-blue-500/10 dark:from-primary-500/5 dark:to-blue-500/5 -z-10" />
-                <div className="fixed bottom-0 left-0 right-0 h-40 bg-gradient-to-r from-blue-500/10 to-primary-500/10 dark:from-blue-500/5 dark:to-primary-500/5 -z-10" />
+                <div className="fixed top-0 left-0 right-0 h-40 bg-linear-to-r from-primary-500/10 to-blue-500/10 dark:from-primary-500/5 dark:to-blue-500/5 -z-10" />
+                <div className="fixed bottom-0 left-0 right-0 h-40 bg-linear-to-r from-blue-500/10 to-primary-500/10 dark:from-blue-500/5 dark:to-primary-500/5 -z-10" />
             </div>
         </div>
     )

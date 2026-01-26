@@ -22,7 +22,7 @@ import {
 
 // eslint-disable-next-line no-unused-vars
 const StatCard = ({ title, value, icon: Icon, change, color, loading, subtitle, trend = 'up' }) => (
-    <Card className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group">
+    <Card className="h-full hover:shadow-lg hover:transition-all hover:duration-300 hover:-translate-y-1 group">
         <CardContent className="p-4 sm:p-6">
             <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0 pr-2">
@@ -38,8 +38,8 @@ const StatCard = ({ title, value, icon: Icon, change, color, loading, subtitle, 
                             {change !== undefined && (
                                 <div className="flex items-center gap-1 sm:gap-2 mt-2 sm:mt-3">
                                     <span className={`inline-flex items-center px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium ${trend === 'up'
-                                            ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                                            : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                                        : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                                         }`}>
                                         {trend === 'up' ? '↗' : '↘'} {Math.abs(change)}%
                                     </span>
@@ -51,7 +51,7 @@ const StatCard = ({ title, value, icon: Icon, change, color, loading, subtitle, 
                         </>
                     )}
                 </div>
-                <div className={`ml-2 p-2 sm:p-3 rounded-lg sm:rounded-xl ${color} bg-opacity-10 group-hover:scale-110 transition-transform duration-300 shrink-0`}>
+                <div className={`ml-2 p-2 sm:p-3 rounded-lg sm:rounded-xl ${color} bg-opacity-10 group-hover:scale-110 hover:transition-transform hover:duration-300 shrink-0`}>
                     <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${color}`} />
                 </div>
             </div>
@@ -253,7 +253,7 @@ export const Dashboard = () => {
                 >
                     {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </button>
-                
+
                 <div className="flex-1 ml-4 lg:ml-0">
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                         Tableau de bord
@@ -270,8 +270,8 @@ export const Dashboard = () => {
                                 key={range}
                                 onClick={() => setTimeRange(range)}
                                 className={`px-2 sm:px-3 py-1 text-xs sm:text-sm rounded transition-colors ${timeRange === range
-                                        ? 'bg-white dark:bg-gray-700 shadow text-primary-600 dark:text-primary-400 font-medium'
-                                        : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400'
+                                    ? 'bg-white dark:bg-gray-700 shadow text-primary-600 dark:text-primary-400 font-medium'
+                                    : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400'
                                     }`}
                             >
                                 {range}
@@ -297,8 +297,8 @@ export const Dashboard = () => {
                                 key={range}
                                 onClick={() => setTimeRange(range)}
                                 className={`px-3 py-1.5 text-sm rounded transition-colors ${timeRange === range
-                                        ? 'bg-primary-600 text-white font-medium'
-                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                                    ? 'bg-primary-600 text-white font-medium'
+                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                                     }`}
                             >
                                 {range}
@@ -362,8 +362,8 @@ export const Dashboard = () => {
                                 key={chart}
                                 onClick={() => setActiveChart(chart)}
                                 className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors ${activeChart === chart
-                                        ? 'bg-primary-600 text-white'
-                                        : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                                    ? 'bg-primary-600 text-white'
+                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                                     }`}
                             >
                                 {chart === 'sales' && 'Ventes'}
@@ -426,7 +426,7 @@ export const Dashboard = () => {
                         </div>
                     </CardHeader>
                     <CardContent className="p-4 sm:p-6 pt-0">
-                        <div 
+                        <div
                             ref={chartContainerRef}
                             className="w-full min-h-62.5 max-h-100 overflow-hidden"
                         >
@@ -488,9 +488,9 @@ export const Dashboard = () => {
                                     <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                         <div
                                             className={`h-full rounded-full ${device.type === 'mobile' ? 'bg-blue-500' :
-                                                    device.type === 'desktop' ? 'bg-purple-500' :
-                                                        device.type === 'tablet' ? 'bg-green-500' :
-                                                            'bg-gray-500'
+                                                device.type === 'desktop' ? 'bg-purple-500' :
+                                                    device.type === 'tablet' ? 'bg-green-500' :
+                                                        'bg-gray-500'
                                                 }`}
                                             style={{ width: `${device.value}%` }}
                                         />
@@ -566,8 +566,8 @@ export const Dashboard = () => {
                                             <p className="text-xs text-gray-500 dark:text-gray-400">{product.sales} ventes</p>
                                         </div>
                                         <div className={`px-2 py-1 rounded-full text-xs font-medium ${product.growth > 20
-                                                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                                                : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                                            ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                                            : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
                                             }`}>
                                             ↗ {product.growth}%
                                         </div>

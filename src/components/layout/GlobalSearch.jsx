@@ -62,8 +62,8 @@ const GlobalSearch = () => {
       </button>
 
       {/* Modal de recherche avec backdrop blur */}
-      <Modal 
-        isOpen={isOpen} 
+      <Modal
+        isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         size="lg"
         hideCloseButton

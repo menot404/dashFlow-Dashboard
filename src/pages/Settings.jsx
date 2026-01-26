@@ -4,19 +4,19 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../compone
 import Button from '../components/ui/Button'
 import { useTheme } from '../hooks/useTheme'
 import { useAuth } from '../hooks/useAuth'
-import { 
-  Save, Moon, Sun, Bell, Shield, User, Mail, Phone, Globe, 
-  Download, Trash2, Lock, Key, Database, Palette, Eye, EyeOff,
-  Smartphone, Settings as SettingsIcon, CreditCard, Earth,
-  LogOut, AlertCircle, CheckCircle, XCircle, Languages,
-  Clock, Smartphone as Mobile, Laptop, Tablet
+import {
+    Save, Moon, Sun, Bell, Shield, User, Mail, Phone, Globe,
+    Download, Trash2, Lock, Key, Database, Palette, Eye, EyeOff,
+    Smartphone, Settings as SettingsIcon, CreditCard, Earth,
+    LogOut, AlertCircle, CheckCircle, XCircle, Languages,
+    Clock, Smartphone as Mobile, Laptop, Tablet
 } from 'lucide-react'
 
 const Settings = () => {
     const { theme, toggleTheme } = useTheme()
     const { user, updateUser, logout } = useAuth()
     const navigate = useNavigate()
-    
+
     const [notifications, setNotifications] = useState({
         email: true,
         push: false,
@@ -25,13 +25,13 @@ const Settings = () => {
         security: true,
         newsletter: true,
     })
-    
+
     const [security, setSecurity] = useState({
         twoFactor: false,
         sessionTimeout: '30',
         loginAlerts: true,
     })
-    
+
     const [formData, setFormData] = useState({
         name: user?.name || '',
         email: user?.email || '',
@@ -40,7 +40,7 @@ const Settings = () => {
         language: 'fr',
         timezone: 'Europe/Paris',
     })
-    
+
     const [activeSection, setActiveSection] = useState('profile')
     const [isSaving, setIsSaving] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
@@ -206,7 +206,7 @@ const Settings = () => {
                         {/* User info */}
                         <Card padding="md" className="mt-6">
                             <CardContent className="flex items-center space-x-3">
-                                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary-500 to-purple-500 
+                                <div className="w-12 h-12 rounded-full bg-linear-to-r from-primary-500 to-purple-500 
                                     flex items-center justify-center text-white font-bold">
                                     {getInitials(user?.name)}
                                 </div>
@@ -239,7 +239,7 @@ const Settings = () => {
                                             {/* Avatar */}
                                             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
                                                 <div className="relative">
-                                                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-primary-500 to-purple-500 
+                                                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-linear-to-r from-primary-500 to-purple-500 
                                                         flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">
                                                         {getInitials(user?.name)}
                                                     </div>
@@ -383,7 +383,7 @@ const Settings = () => {
                                         {notificationItems.map((item) => {
                                             const Icon = item.icon
                                             return (
-                                                <div key={item.id} 
+                                                <div key={item.id}
                                                     className="flex items-center justify-between p-4 rounded-lg border border-gray-200 dark:border-gray-700">
                                                     <div className="flex items-center space-x-3">
                                                         <Icon className="w-5 h-5 text-gray-400" />

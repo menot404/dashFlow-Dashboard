@@ -14,7 +14,7 @@ const Layout = () => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768)
         }
-        
+
         checkMobile()
         window.addEventListener('resize', checkMobile)
         return () => window.removeEventListener('resize', checkMobile)
@@ -27,7 +27,7 @@ const Layout = () => {
         } else {
             document.body.style.overflow = 'auto'
         }
-        
+
         return () => {
             document.body.style.overflow = 'auto'
         }

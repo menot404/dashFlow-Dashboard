@@ -66,7 +66,7 @@ const Products = () => {
                 setViewMode('grid')
             }
         }
-        
+
         handleResize()
         window.addEventListener('resize', handleResize)
         return () => window.removeEventListener('resize', handleResize)
@@ -100,7 +100,7 @@ const Products = () => {
             console.error('Error loading categories:', error)
         }
     }
-    
+
     const handleViewDetails = (product) => {
         setViewingProduct(product)
         setDetailModalOpen(true)
@@ -114,7 +114,7 @@ Prix: ${formatCurrency(viewingProduct.price)}
 Catégorie: ${viewingProduct.category}
 Description: ${viewingProduct.description}
             `.trim()
-            
+
             navigator.clipboard.writeText(details)
             showSuccess('Détails copiés dans le presse-papier')
         }
@@ -122,18 +122,18 @@ Description: ${viewingProduct.description}
 
     const filteredProducts = useMemo(() => {
         if (!productsApi.data) return []
-        
+
         let filtered = productsApi.data.filter(product => {
-            const matchesSearch = 
+            const matchesSearch =
                 product.title.toLowerCase().includes(search.toLowerCase()) ||
                 product.description.toLowerCase().includes(search.toLowerCase()) ||
                 product.category.toLowerCase().includes(search.toLowerCase())
-            
-            const matchesCategory = selectedCategories.length === 0 || 
+
+            const matchesCategory = selectedCategories.length === 0 ||
                 selectedCategories.includes(product.category)
-            
+
             const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1]
-            
+
             return matchesSearch && matchesCategory && matchesPrice
         })
 
@@ -141,12 +141,12 @@ Description: ${viewingProduct.description}
         filtered.sort((a, b) => {
             let aValue = a[sortField]
             let bValue = b[sortField]
-            
+
             if (sortField === 'price') {
                 aValue = parseFloat(aValue)
                 bValue = parseFloat(bValue)
             }
-            
+
             if (sortDirection === 'asc') {
                 return aValue > bValue ? 1 : -1
             } else {
@@ -302,12 +302,12 @@ Description: ${viewingProduct.description}
     // Statistiques
     const stats = useMemo(() => {
         if (!productsApi.data) return {}
-        
+
         const totalProducts = filteredProducts.length
         const averagePrice = filteredProducts.reduce((sum, p) => sum + p.price, 0) / totalProducts || 0
         const highRatingProducts = filteredProducts.filter(p => p.rating?.rate >= 4).length
         const lowStockProducts = filteredProducts.filter(p => p.rating?.count < 10).length
-        
+
         return {
             totalProducts,
             averagePrice,
@@ -407,7 +407,7 @@ Description: ${viewingProduct.description}
                         {filteredProducts.length} produit{filteredProducts.length > 1 ? 's' : ''} trouvé{filteredProducts.length > 1 ? 's' : ''}
                     </p>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                     <div className="relative" ref={filterRef}>
                         <button
@@ -416,7 +416,7 @@ Description: ${viewingProduct.description}
                         >
                             <Filter className="w-4 h-4" />
                         </button>
-                        
+
                         {isFilterOpen && (
                             <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50 p-4">
                                 <div className="space-y-4">
@@ -438,7 +438,7 @@ Description: ${viewingProduct.description}
                                             ))}
                                         </div>
                                     </div>
-                                    
+
                                     <div>
                                         <h3 className="font-semibold text-sm text-gray-900 dark:text-white mb-2">
                                             Prix: {formatCurrency(priceRange[0])} - {formatCurrency(priceRange[1])}
@@ -453,7 +453,7 @@ Description: ${viewingProduct.description}
                                             className="w-full"
                                         />
                                     </div>
-                                    
+
                                     <button
                                         onClick={clearFilters}
                                         className="w-full text-sm py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
@@ -464,7 +464,7 @@ Description: ${viewingProduct.description}
                             </div>
                         )}
                     </div>
-                    
+
                     {/* Vue seulement grille pour < 1024 */}
                     <div className="hidden lg:flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
                         <button
@@ -482,7 +482,7 @@ Description: ${viewingProduct.description}
                             <List className="w-4 h-4" />
                         </button>
                     </div>
-                    
+
                     <button
                         onClick={() => {
                             setSelectedProduct(null)
@@ -513,7 +513,7 @@ Description: ${viewingProduct.description}
                         className="w-full"
                     />
                 </div>
-                
+
                 <div className="flex items-center gap-2 overflow-x-auto">
                     <button
                         onClick={() => handleSort('title')}
@@ -524,7 +524,7 @@ Description: ${viewingProduct.description}
                             sortDirection === 'asc' ? <SortAsc className="w-3 h-3" /> : <SortDesc className="w-3 h-3" />
                         )}
                     </button>
-                    
+
                     <button
                         onClick={() => handleSort('price')}
                         className="px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg flex items-center justify-center gap-1 transition-colors"
@@ -539,7 +539,7 @@ Description: ${viewingProduct.description}
 
             {/* Statistiques rapides */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+                <Card className="bg-linear-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
                     <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                             <div>
@@ -552,8 +552,8 @@ Description: ${viewingProduct.description}
                         </div>
                     </CardContent>
                 </Card>
-                
-                <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
+
+                <Card className="bg-linear-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
                     <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                             <div>
@@ -566,8 +566,8 @@ Description: ${viewingProduct.description}
                         </div>
                     </CardContent>
                 </Card>
-                
-                <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20">
+
+                <Card className="bg-linear-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20">
                     <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                             <div>
@@ -580,8 +580,8 @@ Description: ${viewingProduct.description}
                         </div>
                     </CardContent>
                 </Card>
-                
-                <Card className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20">
+
+                <Card className="bg-linear-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20">
                     <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                             <div>
@@ -743,7 +743,7 @@ Description: ${viewingProduct.description}
                                         </span>
                                     </div>
                                 </div>
-                                
+
                                 {/* Contenu */}
                                 <div className="flex-1">
                                     <h3 className="font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 text-sm">
@@ -752,7 +752,7 @@ Description: ${viewingProduct.description}
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">
                                         {product.description}
                                     </p>
-                                    
+
                                     <div className="flex items-center justify-between mb-3">
                                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 capitalize">
                                             {product.category}
@@ -765,7 +765,7 @@ Description: ${viewingProduct.description}
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 {/* Actions */}
                                 <div className="flex justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
                                     <button
@@ -990,7 +990,7 @@ Description: ${viewingProduct.description}
                                     onError={handleImageError}
                                 />
                             </div>
-                            
+
                             <div className="flex-1">
                                 <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                                     <div className="flex-1">
@@ -1006,7 +1006,7 @@ Description: ${viewingProduct.description}
                                             </span>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="flex space-x-2">
                                         <button
                                             onClick={handleCopyDetails}
@@ -1032,7 +1032,7 @@ Description: ${viewingProduct.description}
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 {/* Rating */}
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
                                     <div className="flex items-center">
@@ -1046,7 +1046,7 @@ Description: ${viewingProduct.description}
                                         ID: #{viewingProduct.id}
                                     </span>
                                 </div>
-                                
+
                                 {/* Description */}
                                 <div className="mb-6">
                                     <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Description</h3>
@@ -1056,7 +1056,7 @@ Description: ${viewingProduct.description}
                                 </div>
                             </div>
                         </div>
-                        
+
                         {/* Informations détaillées */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
@@ -1076,7 +1076,7 @@ Description: ${viewingProduct.description}
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4">
                                 <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Statistiques</h3>
                                 <div className="space-y-3">
@@ -1095,10 +1095,10 @@ Description: ${viewingProduct.description}
                                 </div>
                             </div>
                         </div>
-                        
+
                         {/* Actions */}
                         <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-                            <button 
+                            <button
                                 onClick={() => setDetailModalOpen(false)}
                                 className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                             >

@@ -4,10 +4,10 @@ import { Menu, Transition } from '@headlessui/react'
 import { MoreVertical, Eye, Edit, Trash2, Copy, Download } from 'lucide-react'
 import clsx from 'clsx'
 
-const ActionMenu = ({ 
-  onView, 
-  onEdit, 
-  onDelete, 
+const ActionMenu = ({
+  onView,
+  onEdit,
+  onDelete,
   onCopy,
   onDownload,
 }) => {
@@ -44,7 +44,7 @@ const ActionMenu = ({
                 </button>
               )}
             </Menu.Item>
-            
+
             <Menu.Item>
               {({ active }) => (
                 <button

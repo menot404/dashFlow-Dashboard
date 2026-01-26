@@ -17,11 +17,11 @@ const Header = ({ onMenuClick }) => {
                 >
                     <Menu className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                 </button>
-                
+
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                     Dashboard
                 </h2>
-                
+
                 {/* GlobalSearch uniquement sur desktop */}
                 <div className="hidden md:block ml-4">
                     <GlobalSearch />
@@ -48,7 +48,7 @@ const Header = ({ onMenuClick }) => {
 
                 <div className="flex items-center gap-2">
                     <div className="hidden sm:flex flex-col items-end">
-                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate max-w-[120px]">
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate max-w-30">
                             {user?.name || 'Admin'}
                         </span>
                         <span className="text-xs text-gray-500 dark:text-gray-400">

@@ -64,7 +64,7 @@ const Register = () => {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4 md:p-6">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4 md:p-6">
             <div className="w-full max-w-md mx-auto">
                 <div className="text-center mb-6 md:mb-8">
                     <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 dark:text-primary-500 mb-2">
@@ -86,7 +86,7 @@ const Register = () => {
                         <CardContent className="space-y-3 sm:space-y-4">
                             {error && (
                                 <div className="flex items-center p-3 sm:p-4 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg animate-fade-in">
-                                    <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
+                                    <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2 shrink-0" />
                                     <span className="text-xs sm:text-sm">{error}</span>
                                 </div>
                             )}

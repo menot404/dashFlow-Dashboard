@@ -21,8 +21,8 @@ import EmptyState from '../components/common/EmptyState'
 import ConfirmationModal from '../components/ui/ConfirmationModal'
 import { useConfirmation } from '../hooks/useConfirmation'
 import { useNotification } from '../hooks/useNotification'
-import { 
-    Eye, Edit, Trash2, Mail, Phone, Globe, UserPlus, UserCheck, 
+import {
+    Eye, Edit, Trash2, Mail, Phone, Globe, UserPlus, UserCheck,
     Search, MoreVertical, Copy, Share2, User, MapPin, Building,
     Calendar, Shield, Activity, Download, Filter, SortAsc, SortDesc,
     CheckCircle, XCircle, Loader2, ExternalLink
@@ -61,14 +61,14 @@ export const Users = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const loadUsers = async () => {
+    const loadUsers = useCallback(async () => {
         try {
             await usersApi.execute()
         } catch (error) {
             showError('Erreur lors du chargement des utilisateurs')
             console.error(error)
         }
-    }
+    }, [usersApi, showError])
 
     const handleViewUserDetails = useCallback((user) => {
         setViewingUser(user)
@@ -85,7 +85,7 @@ Entreprise: ${viewingUser.company?.name}
 Rôle: ${viewingUser.role || 'Utilisateur'}
 Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
             `.trim()
-            
+
             navigator.clipboard.writeText(details)
             showSuccess('Détails copiés dans le presse-papier')
         }
@@ -93,7 +93,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
 
     const filteredUsers = useMemo(() => {
         if (!usersApi.data) return []
-        
+
         let result = usersApi.data.filter(user =>
             user.name.toLowerCase().includes(search.toLowerCase()) ||
             user.email.toLowerCase().includes(search.toLowerCase()) ||
@@ -113,7 +113,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         result.sort((a, b) => {
             const aValue = a[sortConfig.key]?.toLowerCase?.() || a[sortConfig.key]
             const bValue = b[sortConfig.key]?.toLowerCase?.() || b[sortConfig.key]
-            
+
             if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1
             if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1
             return 0
@@ -168,7 +168,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                 }
             },
         })
-    }, [askConfirmation, showSuccess, showError])
+    }, [askConfirmation, showSuccess, showError, loadUsers])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -342,11 +342,11 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                 Gestion des utilisateurs
                             </h1>
                             <p className="text-gray-600 dark:text-gray-400">
-                                {filteredUsers.length} utilisateur{filteredUsers.length > 1 ? 's' : ''} 
+                                {filteredUsers.length} utilisateur{filteredUsers.length > 1 ? 's' : ''}
                                 {search && ` pour "${search}"`}
                             </p>
                         </div>
-                        
+
                         <div className="flex flex-col sm:flex-row gap-3">
                             <Button
                                 variant="outline"
@@ -358,7 +358,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                 <Download className="w-4 h-4" />
                                 <span className="hidden sm:inline">Exporter</span>
                             </Button>
-                            
+
                             <Button
                                 onClick={() => {
                                     setSelectedUser(null)
@@ -392,7 +392,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                 icon={Search}
                             />
                         </div>
-                        
+
                         <div className="flex gap-3">
                             <div className="relative">
                                 <select
@@ -446,14 +446,14 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                 </TableHead>
                                 <TableBody>
                                     {pagination.paginatedItems.map((user) => (
-                                        <TableRow 
-                                            key={user.id} 
+                                        <TableRow
+                                            key={user.id}
                                             className="hover:bg-gray-50 dark:hover:bg-gray-800/30 border-b border-gray-100 dark:border-gray-700 last:border-0"
                                         >
                                             <TableCell className="py-4 pl-6">
                                                 <div className="flex items-center space-x-4">
                                                     <div className="relative">
-                                                        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary-500 to-purple-500 
+                                                        <div className="w-12 h-12 rounded-full bg-linear-to-r from-primary-500 to-purple-500 
                                                             flex items-center justify-center text-white font-bold text-lg">
                                                             {getInitials(user.name)}
                                                         </div>
@@ -474,19 +474,19 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                             </TableCell>
                                             <TableCell className="py-4">
                                                 <div className="flex items-center text-gray-700 dark:text-gray-300">
-                                                    <Mail className="w-4 h-4 mr-2 flex-shrink-0" />
+                                                    <Mail className="w-4 h-4 mr-2 shrink-0" />
                                                     <span className="truncate">{user.email}</span>
                                                 </div>
                                             </TableCell>
                                             <TableCell className="py-4">
                                                 <div className="flex items-center text-gray-700 dark:text-gray-300">
-                                                    <Phone className="w-4 h-4 mr-2 flex-shrink-0" />
+                                                    <Phone className="w-4 h-4 mr-2 shrink-0" />
                                                     <span>{user.phone || 'Non renseigné'}</span>
                                                 </div>
                                             </TableCell>
                                             <TableCell className="py-4">
                                                 <div className="flex items-center">
-                                                    <Building className="w-4 h-4 mr-2 text-gray-400 flex-shrink-0" />
+                                                    <Building className="w-4 h-4 mr-2 text-gray-400 shrink-0" />
                                                     <span className="text-gray-700 dark:text-gray-300">
                                                         {user.company.name}
                                                     </span>
@@ -494,7 +494,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                             </TableCell>
                                             <TableCell className="py-4">
                                                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
-                                                    ${user.status === 'active' 
+                                                    ${user.status === 'active'
                                                         ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
                                                         : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                                                     }`}>
@@ -558,7 +558,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex items-center space-x-3 flex-1 min-w-0">
                                         <div className="relative">
-                                            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary-500 to-purple-500 
+                                            <div className="w-12 h-12 rounded-full bg-linear-to-r from-primary-500 to-purple-500 
                                                 flex items-center justify-center text-white font-bold">
                                                 {getInitials(user.name)}
                                             </div>
@@ -595,7 +595,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                         </Button>
                                     </div>
                                 </div>
-                                
+
                                 <div className="grid grid-cols-2 gap-3 mb-4">
                                     <div className="space-y-1">
                                         <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
@@ -616,10 +616,10 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                         </p>
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
                                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
-                                        ${user.status === 'active' 
+                                        ${user.status === 'active'
                                             ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
                                             : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                                         }`}>
@@ -805,7 +805,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                             <div className="flex flex-col md:flex-row gap-6">
                                 <div className="shrink-0">
                                     <div className="relative">
-                                        <div className="w-32 h-32 rounded-full bg-gradient-to-r from-primary-500 to-purple-500 
+                                        <div className="w-32 h-32 rounded-full bg-linear-to-r from-primary-500 to-purple-500 
                                             flex items-center justify-center text-white text-4xl font-bold">
                                             {getInitials(viewingUser.name)}
                                         </div>
@@ -817,7 +817,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                         )}
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex-1">
                                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                                         <div className="flex-1">
@@ -836,7 +836,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                                 </span>
                                             </div>
                                         </div>
-                                        
+
                                         <div className="flex space-x-2">
                                             <Button
                                                 variant="outline"
@@ -861,7 +861,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                             </Button>
                                         </div>
                                     </div>
-                                    
+
                                     {/* Informations de base */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                         <div className="flex items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
@@ -878,9 +878,9 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                             <div>
                                                 <p className="text-sm text-gray-500 dark:text-gray-400">Site web</p>
                                                 {viewingUser.website ? (
-                                                    <a 
-                                                        href={`https://${viewingUser.website}`} 
-                                                        target="_blank" 
+                                                    <a
+                                                        href={`https://${viewingUser.website}`}
+                                                        target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="font-medium text-primary-600 dark:text-primary-400 hover:underline 
                                                             flex items-center gap-1"
@@ -898,7 +898,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {/* Sections détaillées */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Informations professionnelles */}
@@ -934,7 +934,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                         </div>
                                     </CardContent>
                                 </Card>
-                                
+
                                 {/* Informations de contact */}
                                 <Card>
                                     <CardContent className="p-4">
@@ -971,7 +971,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                     </CardContent>
                                 </Card>
                             </div>
-                            
+
                             {/* Statistiques */}
                             <Card>
                                 <CardContent className="p-4">
@@ -999,7 +999,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                     </div>
                                 </CardContent>
                             </Card>
-                            
+
                             {/* Actions */}
                             <div className="flex flex-col sm:flex-row justify-between gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
                                 <Button

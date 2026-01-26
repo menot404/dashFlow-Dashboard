@@ -2,11 +2,11 @@ import React, { Fragment, useEffect, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { X, Maximize2, Minimize2 } from 'lucide-react'
 
-const Modal = ({ 
-  isOpen, 
-  onClose, 
-  title, 
-  children, 
+const Modal = ({
+  isOpen,
+  onClose,
+  title,
+  children,
   size = 'md',
   hideCloseButton = false,
   fullScreen = false,
@@ -82,10 +82,10 @@ const Modal = ({
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog 
-        as="div" 
-        className="relative z-50" 
-        onClose={closeOnBackdropClick ? onClose : () => {}}
+      <Dialog
+        as="div"
+        className="relative z-50"
+        onClose={closeOnBackdropClick ? onClose : () => { }}
         static
       >
         {/* Backdrop amélioré */}
@@ -98,21 +98,19 @@ const Modal = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div 
-            className={`fixed inset-0 ${
-              backdropBlur 
-                ? 'bg-black/50 backdrop-blur-sm' 
+          <div
+            className={`fixed inset-0 ${backdropBlur
+                ? 'bg-black/50 backdrop-blur-sm'
                 : 'bg-black/40'
-            }`}
+              }`}
             aria-hidden="true"
           />
         </Transition.Child>
 
         {/* Modal */}
         <div className="fixed inset-0 overflow-y-auto">
-          <div className={`flex ${
-            fullScreen ? 'h-full items-stretch' : 'min-h-full items-center justify-center'
-          } p-2 sm:p-4 md:p-6`}>
+          <div className={`flex ${fullScreen ? 'h-full items-stretch' : 'min-h-full items-center justify-center'
+            } p-2 sm:p-4 md:p-6`}>
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -139,19 +137,19 @@ const Modal = ({
                     sticky top-0 z-10
                     ${paddingClasses[padding]} pb-4
                     border-b border-gray-100 dark:border-gray-700
-                    bg-gradient-to-r from-gray-50 to-white 
+                    bg-linear-to-r from-gray-50 to-white 
                     dark:from-gray-800 dark:to-gray-900
                   `}>
                     <div className="flex items-center justify-between gap-4">
-                      <Dialog.Title 
-                        as="h3" 
+                      <Dialog.Title
+                        as="h3"
                         className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 truncate"
                       >
                         {title}
                       </Dialog.Title>
-                      
+
                       {!hideCloseButton && (
-                        <div className="flex items-center gap-2 flex-shrink-0">
+                        <div className="flex items-center gap-2 shrink-0">
                           <button
                             onClick={onClose}
                             className={`
@@ -187,7 +185,7 @@ const Modal = ({
                   <div className="
                     absolute bottom-0 left-0 right-0
                     h-8 pointer-events-none
-                    bg-gradient-to-t from-white dark:from-gray-800 to-transparent
+                    bg-linear-to-t from-white dark:from-gray-800 to-transparent
                     opacity-50
                   " />
                 )}
