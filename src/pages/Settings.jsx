@@ -37,6 +37,10 @@ const Settings = () => {
         language: 'fr',
         timezone: 'Europe/Paris',
     })
+    
+    const [activeSection, setActiveSection] = useState('profile')
+    const [isSaving, setIsSaving] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
 
     const [activeSection, setActiveSection] = useState('profile')
     const [isSaving, setIsSaving] = useState(false)
