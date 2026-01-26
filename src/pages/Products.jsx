@@ -21,7 +21,7 @@ import LoadingSpinner from '../components/common/LoadingSpinner'
 import ErrorMessage from '../components/common/ErrorMessage'
 import EmptyState from '../components/common/EmptyState'
 import Modal from '../components/ui/Modal'
-import { Eye, Edit, Trash2, Star, Tag, Search, PackagePlus, PackageCheck, Image as ImageIcon, DollarSign, MoreVertical, Copy, Share2, Grid, List, Filter, SortAsc, SortDesc, TrendingUp, AlertCircle, CheckCircle2, ChevronDown } from 'lucide-react'
+import { Eye, Edit, Trash2, Star, Tag, PackagePlus, PackageCheck, Image as ImageIcon, DollarSign, Copy, Share2, Grid, List, Filter, SortAsc, SortDesc, TrendingUp, AlertCircle } from 'lucide-react'
 import { ITEMS_PER_PAGE } from '../utils/constants'
 import { formatCurrency, formatNumber } from '../utils/helpers'
 
@@ -317,7 +317,7 @@ Description: ${viewingProduct.description}
     }, [filteredProducts, productsApi.data])
 
     if (productsApi.loading && !productsApi.data) {
-        return <LoadingSpinner className="min-h-100" />
+        return <LoadingSpinner className="min-h-100" text="Chargement des produits..." />
     }
 
     if (productsApi.error) {

@@ -5,11 +5,8 @@ import Button from '../components/ui/Button'
 import { useTheme } from '../hooks/useTheme'
 import { useAuth } from '../hooks/useAuth'
 import {
-    Save, Moon, Sun, Bell, Shield, User, Mail, Phone, Globe,
-    Download, Trash2, Lock, Key, Database, Palette, Eye, EyeOff,
-    Smartphone, Settings as SettingsIcon, CreditCard, Earth,
-    LogOut, AlertCircle, CheckCircle, XCircle, Languages,
-    Clock, Smartphone as Mobile, Laptop, Tablet
+    Save, Moon, Sun, Bell, Shield, User, Mail, Download, Trash2, Lock, Database, Palette, Eye, EyeOff,
+    Settings as SettingsIcon, Earth, LogOut, XCircle, Clock, Smartphone as Mobile, Laptop, Tablet
 } from 'lucide-react'
 
 const Settings = () => {
@@ -303,7 +300,7 @@ const Settings = () => {
                                                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
                                                             bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
                                                             focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                                        placeholder="+33 1 23 45 67 89"
+                                                        placeholder="+226 67 54 32 76"
                                                     />
                                                 </div>
 
@@ -646,8 +643,10 @@ const Settings = () => {
                                             loading={isSaving}
                                             className="w-full"
                                         >
-                                            <Save className="w-4 h-4 mr-2" />
-                                            Sauvegarder tous les changements
+                                            <Save className="w-5 h-5 mr-2" />
+                                            <span>
+                                                Sauvegarder tous les changements
+                                            </span>
                                         </Button>
                                     </CardContent>
                                 </Card>

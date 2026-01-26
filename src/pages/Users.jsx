@@ -22,10 +22,9 @@ import ConfirmationModal from '../components/ui/ConfirmationModal'
 import { useConfirmation } from '../hooks/useConfirmation'
 import { useNotification } from '../hooks/useNotification'
 import {
-    Eye, Edit, Trash2, Mail, Phone, Globe, UserPlus, UserCheck,
-    Search, MoreVertical, Copy, Share2, User, MapPin, Building,
-    Calendar, Shield, Activity, Download, Filter, SortAsc, SortDesc,
-    CheckCircle, XCircle, Loader2, ExternalLink
+    Eye, Edit, Trash2, Mail, Phone, UserPlus,
+    Search, Copy, User, MapPin, Building, Activity, Download, Filter, SortAsc, SortDesc,
+    CheckCircle, XCircle, ExternalLink, Globe as GlobeIcon
 } from 'lucide-react'
 import { ITEMS_PER_PAGE } from '../utils/constants'
 
@@ -139,6 +138,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
     }, [])
 
     const getInitials = useCallback((name) => {
+        if (!name) return '??'
         return name
             .split(' ')
             .map(word => word[0])
@@ -237,14 +237,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
     }, [])
 
     if (usersApi.loading && !usersApi.data) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-center">
-                    <Loader2 className="w-12 h-12 animate-spin text-primary-600 mx-auto mb-4" />
-                    <p className="text-gray-600 dark:text-gray-400">Chargement des utilisateurs...</p>
-                </div>
-            </div>
-        )
+        return <LoadingSpinner className="min-h-screen" text="Chargement des utilisateurs..." />
     }
 
     if (usersApi.error) {
@@ -332,7 +325,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
     )
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 lg:p-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
             <div className="max-w-7xl mx-auto">
                 {/* En-tête amélioré */}
                 <div className="mb-6 sm:mb-8">
@@ -351,9 +344,6 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                             <Button
                                 variant="outline"
                                 className="flex items-center gap-2"
-                                onClick={() => {
-                                    // Exporter les données
-                                }}
                             >
                                 <Download className="w-4 h-4" />
                                 <span className="hidden sm:inline">Exporter</span>
@@ -399,7 +389,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                                     value={activeFilters.status}
                                     onChange={(e) => setActiveFilters(prev => ({ ...prev, status: e.target.value }))}
                                     className="appearance-none bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 
-                                        rounded-xl pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 
+                                        rounded-lg pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-500 
                                         text-gray-900 dark:text-gray-100 text-sm"
                                 >
                                     <option value="all">Tous les statuts</option>
@@ -416,7 +406,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
 
                 {/* Tableau desktop */}
                 <div className="hidden lg:block">
-                    <Card className="overflow-hidden border-0 shadow-lg">
+                    <Card className="overflow-hidden">
                         <CardContent className="p-0">
                             <Table>
                                 <TableHead className="bg-gray-50 dark:bg-gray-800/50">
@@ -553,7 +543,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                 {/* Version mobile/tablette */}
                 <div className="lg:hidden space-y-4">
                     {pagination.paginatedItems.map((user) => (
-                        <Card key={user.id} className="overflow-hidden border-0 shadow-md">
+                        <Card key={user.id} className="overflow-hidden">
                             <CardContent className="p-4">
                                 <div className="flex items-start justify-between mb-4">
                                     <div className="flex items-center space-x-3 flex-1 min-w-0">
@@ -650,132 +640,136 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                     </div>
                 )}
 
-                {/* Modal de création/édition */}
+                {/* Modal de création/édition - AVEC SCROLL INTERNE */}
                 <Modal
                     isOpen={isModalOpen}
                     onClose={handleCancel}
                     title={selectedUser ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur'}
                     size="lg"
+                    showHeader={true}
+                    padding="default"
                 >
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                            <div className="space-y-2">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Nom complet *
-                                </label>
-                                <input
-                                    type="text"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl
-                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    placeholder="John Doe"
-                                    required
-                                    autoFocus
-                                />
+                    <div className="max-h-[60vh] sm:max-h-100 overflow-y-auto p-2">
+                        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 pb-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Nom complet *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
+                                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                        placeholder="John Doe"
+                                        required
+                                        autoFocus
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Email *
+                                    </label>
+                                    <input
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
+                                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                        placeholder="john@example.com"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Téléphone
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        value={formData.phone}
+                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
+                                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                        placeholder="+33 1 23 45 67 89"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Site web
+                                    </label>
+                                    <input
+                                        type="url"
+                                        value={formData.website}
+                                        onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
+                                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                        placeholder="https://example.com"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Entreprise
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={formData.company.name}
+                                        onChange={(e) => setFormData({
+                                            ...formData,
+                                            company: { ...formData.company, name: e.target.value }
+                                        })}
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
+                                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                        placeholder="Nom de l'entreprise"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Statut
+                                    </label>
+                                    <select
+                                        value={formData.status}
+                                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
+                                            bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                    >
+                                        <option value="active">Actif</option>
+                                        <option value="inactive">Inactif</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Email *
-                                </label>
-                                <input
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl
-                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    placeholder="john@example.com"
-                                    required
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Téléphone
-                                </label>
-                                <input
-                                    type="tel"
-                                    value={formData.phone}
-                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl
-                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    placeholder="+33 1 23 45 67 89"
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Site web
-                                </label>
-                                <input
-                                    type="url"
-                                    value={formData.website}
-                                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl
-                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    placeholder="https://example.com"
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Entreprise
-                                </label>
-                                <input
-                                    type="text"
-                                    value={formData.company.name}
-                                    onChange={(e) => setFormData({
-                                        ...formData,
-                                        company: { ...formData.company, name: e.target.value }
-                                    })}
-                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl
-                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                                    placeholder="Nom de l'entreprise"
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Statut
-                                </label>
-                                <select
-                                    value={formData.status}
-                                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl
-                                        bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700 mt-4 sm:mt-6">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={handleCancel}
+                                    disabled={isSaving}
+                                    className="w-full sm:w-auto order-2 sm:order-1"
                                 >
-                                    <option value="active">Actif</option>
-                                    <option value="inactive">Inactif</option>
-                                </select>
+                                    Annuler
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    loading={isSaving}
+                                    className="w-full sm:w-auto order-1 sm:order-2"
+                                >
+                                    {selectedUser ? 'Mettre à jour' : 'Créer l\'utilisateur'}
+                                </Button>
                             </div>
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={handleCancel}
-                                disabled={isSaving}
-                                className="w-full sm:w-auto"
-                            >
-                                Annuler
-                            </Button>
-                            <Button
-                                type="submit"
-                                loading={isSaving}
-                                className="w-full sm:w-auto"
-                            >
-                                {selectedUser ? 'Mettre à jour' : 'Créer l\'utilisateur'}
-                            </Button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </Modal>
 
                 {/* Modal de confirmation */}
@@ -792,239 +786,244 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
                     isLoading={isDeleting}
                 />
 
-                {/* Modal de détails de l'utilisateur */}
+                {/* Modal de détails de l'utilisateur - AVEC SCROLL INTERNE */}
                 <Modal
                     isOpen={userDetailModalOpen}
                     onClose={() => setUserDetailModalOpen(false)}
                     title="Détails de l'utilisateur"
                     size="xl"
+                    showHeader={true}
+                    padding="default"
                 >
-                    {viewingUser && (
-                        <div className="space-y-6">
-                            {/* Header avec avatar et infos */}
-                            <div className="flex flex-col md:flex-row gap-6">
-                                <div className="shrink-0">
-                                    <div className="relative">
-                                        <div className="w-32 h-32 rounded-full bg-linear-to-r from-primary-500 to-purple-500 
-                                            flex items-center justify-center text-white text-4xl font-bold">
-                                            {getInitials(viewingUser.name)}
-                                        </div>
-                                        {viewingUser.status === 'active' && (
-                                            <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 
-                                                border-white dark:border-gray-800 flex items-center justify-center">
-                                                <CheckCircle className="w-4 h-4 text-white" />
+                    <div className="max-h-[60vh] sm:max-h-100 overflow-y-auto p-2">
+                        {viewingUser && (
+                            <div className="space-y-6 pb-4">
+                                {/* Header avec avatar et infos */}
+                                <div className="flex flex-col md:flex-row gap-4 sm:gap-6">
+                                    <div className="shrink-0 flex justify-center md:justify-start">
+                                        <div className="relative">
+                                            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-linear-to-r from-primary-500 to-purple-500 
+                                                flex items-center justify-center text-white text-3xl sm:text-4xl font-bold">
+                                                {getInitials(viewingUser.name)}
                                             </div>
-                                        )}
+                                            {viewingUser.status === 'active' && (
+                                                <div className="absolute -bottom-2 -right-2 w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded-full border-2 sm:border-4 
+                                                    border-white dark:border-gray-800 flex items-center justify-center">
+                                                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex-1">
+                                        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                                            <div className="flex-1">
+                                                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                                                    {viewingUser.name}
+                                                </h2>
+                                                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4">
+                                                    <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium
+                                                        bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                                        <User className="w-3 h-3 mr-1" />
+                                                        {viewingUser.role || 'Utilisateur'}
+                                                    </span>
+                                                    <span className="inline-flex items-center text-gray-700 dark:text-gray-300 text-sm sm:text-base">
+                                                        <Mail className="w-4 h-4 mr-2" />
+                                                        {viewingUser.email}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex space-x-2">
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={handleCopyUserDetails}
+                                                    className="flex items-center gap-1 sm:gap-2"
+                                                >
+                                                    <Copy className="w-3 h-3 sm:w-4 sm:h-4" />
+                                                    <span className="hidden sm:inline">Copier</span>
+                                                </Button>
+                                                <Button
+                                                    variant="primary"
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        setUserDetailModalOpen(false)
+                                                        setTimeout(() => handleEdit(viewingUser), 300)
+                                                    }}
+                                                    className="flex items-center gap-1 sm:gap-2"
+                                                >
+                                                    <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
+                                                    <span className="hidden sm:inline">Modifier</span>
+                                                </Button>
+                                            </div>
+                                        </div>
+
+                                        {/* Informations de base */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-6">
+                                            <div className="flex items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                                <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 mr-3" />
+                                                <div>
+                                                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Téléphone</p>
+                                                    <p className="font-medium text-gray-900 dark:text-gray-100">
+                                                        {viewingUser.phone || 'Non renseigné'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                                <GlobeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 mr-3" />
+                                                <div>
+                                                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Site web</p>
+                                                    {viewingUser.website ? (
+                                                        <a
+                                                            href={`https://${viewingUser.website}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="font-medium text-primary-600 dark:text-primary-400 hover:underline 
+                                                                flex items-center gap-1 text-sm sm:text-base"
+                                                        >
+                                                            {viewingUser.website}
+                                                            <ExternalLink className="w-3 h-3" />
+                                                        </a>
+                                                    ) : (
+                                                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                                                            Non renseigné
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="flex-1">
-                                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                                        <div className="flex-1">
-                                            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                                                {viewingUser.name}
-                                            </h2>
-                                            <div className="flex flex-wrap items-center gap-3 mb-4">
-                                                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                                                    bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                                                    <User className="w-3 h-3 mr-1" />
-                                                    {viewingUser.role || 'Utilisateur'}
-                                                </span>
-                                                <span className="inline-flex items-center text-gray-700 dark:text-gray-300">
-                                                    <Mail className="w-4 h-4 mr-2" />
-                                                    {viewingUser.email}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex space-x-2">
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={handleCopyUserDetails}
-                                                className="flex items-center gap-2"
-                                            >
-                                                <Copy className="w-4 h-4" />
-                                                Copier
-                                            </Button>
-                                            <Button
-                                                variant="primary"
-                                                size="sm"
-                                                onClick={() => {
-                                                    setUserDetailModalOpen(false)
-                                                    setTimeout(() => handleEdit(viewingUser), 300)
-                                                }}
-                                                className="flex items-center gap-2"
-                                            >
-                                                <Edit className="w-4 h-4" />
-                                                Modifier
-                                            </Button>
-                                        </div>
-                                    </div>
-
-                                    {/* Informations de base */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                        <div className="flex items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                                            <Phone className="w-5 h-5 text-gray-400 mr-3" />
-                                            <div>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">Téléphone</p>
-                                                <p className="font-medium text-gray-900 dark:text-gray-100">
-                                                    {viewingUser.phone || 'Non renseigné'}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                                            <Globe className="w-5 h-5 text-gray-400 mr-3" />
-                                            <div>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400">Site web</p>
-                                                {viewingUser.website ? (
-                                                    <a
-                                                        href={`https://${viewingUser.website}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="font-medium text-primary-600 dark:text-primary-400 hover:underline 
-                                                            flex items-center gap-1"
-                                                    >
-                                                        {viewingUser.website}
-                                                        <ExternalLink className="w-3 h-3" />
-                                                    </a>
-                                                ) : (
-                                                    <p className="font-medium text-gray-900 dark:text-gray-100">
-                                                        Non renseigné
-                                                    </p>
+                                {/* Sections détaillées */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                                    {/* Informations professionnelles */}
+                                    <Card padding="md">
+                                        <CardContent className="p-3 sm:p-4">
+                                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 sm:mb-4 flex items-center">
+                                                <Building className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                                                Entreprise
+                                            </h3>
+                                            <div className="space-y-2 sm:space-y-3">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Nom</span>
+                                                    <span className="font-medium text-gray-900 dark:text-gray-100 text-sm sm:text-base">
+                                                        {viewingUser.company?.name}
+                                                    </span>
+                                                </div>
+                                                {viewingUser.company?.catchPhrase && (
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Slogan</span>
+                                                        <span className="font-medium text-gray-900 dark:text-gray-100 text-xs sm:text-sm text-right">
+                                                            {viewingUser.company.catchPhrase}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                {viewingUser.company?.bs && (
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Domaine</span>
+                                                        <span className="font-medium text-gray-900 dark:text-gray-100 text-sm sm:text-base">
+                                                            {viewingUser.company.bs}
+                                                        </span>
+                                                    </div>
                                                 )}
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                        </CardContent>
+                                    </Card>
 
-                            {/* Sections détaillées */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {/* Informations professionnelles */}
-                                <Card>
-                                    <CardContent className="p-4">
-                                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                                            <Building className="w-5 h-5 mr-2" />
-                                            Entreprise
-                                        </h3>
-                                        <div className="space-y-3">
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-600 dark:text-gray-400">Nom</span>
-                                                <span className="font-medium text-gray-900 dark:text-gray-100">
-                                                    {viewingUser.company?.name}
-                                                </span>
+                                    {/* Informations de contact */}
+                                    <Card padding="md">
+                                        <CardContent className="p-3 sm:p-4">
+                                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 sm:mb-4 flex items-center">
+                                                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                                                Adresse
+                                            </h3>
+                                            <div className="space-y-2 sm:space-y-3">
+                                                {viewingUser.address?.street && (
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Rue</span>
+                                                        <span className="font-medium text-gray-900 dark:text-gray-100 text-sm sm:text-base">
+                                                            {viewingUser.address.street}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                {viewingUser.address?.city && (
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Ville</span>
+                                                        <span className="font-medium text-gray-900 dark:text-gray-100 text-sm sm:text-base">
+                                                            {viewingUser.address.city}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                {viewingUser.address?.zipcode && (
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Code postal</span>
+                                                        <span className="font-medium text-gray-900 dark:text-gray-100 text-sm sm:text-base">
+                                                            {viewingUser.address.zipcode}
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </div>
-                                            {viewingUser.company?.catchPhrase && (
-                                                <div className="flex justify-between">
-                                                    <span className="text-gray-600 dark:text-gray-400">Slogan</span>
-                                                    <span className="font-medium text-gray-900 dark:text-gray-100 text-right">
-                                                        {viewingUser.company.catchPhrase}
-                                                    </span>
-                                                </div>
-                                            )}
-                                            {viewingUser.company?.bs && (
-                                                <div className="flex justify-between">
-                                                    <span className="text-gray-600 dark:text-gray-400">Domaine</span>
-                                                    <span className="font-medium text-gray-900 dark:text-gray-100">
-                                                        {viewingUser.company.bs}
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                                        </CardContent>
+                                    </Card>
+                                </div>
 
-                                {/* Informations de contact */}
-                                <Card>
-                                    <CardContent className="p-4">
-                                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                                            <MapPin className="w-5 h-5 mr-2" />
-                                            Adresse
+                                {/* Statistiques */}
+                                <Card padding="md">
+                                    <CardContent className="p-3 sm:p-4">
+                                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 sm:mb-4 flex items-center">
+                                            <Activity className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                                            Activité
                                         </h3>
-                                        <div className="space-y-3">
-                                            {viewingUser.address?.street && (
-                                                <div className="flex justify-between">
-                                                    <span className="text-gray-600 dark:text-gray-400">Rue</span>
-                                                    <span className="font-medium text-gray-900 dark:text-gray-100">
-                                                        {viewingUser.address.street}
-                                                    </span>
-                                                </div>
-                                            )}
-                                            {viewingUser.address?.city && (
-                                                <div className="flex justify-between">
-                                                    <span className="text-gray-600 dark:text-gray-400">Ville</span>
-                                                    <span className="font-medium text-gray-900 dark:text-gray-100">
-                                                        {viewingUser.address.city}
-                                                    </span>
-                                                </div>
-                                            )}
-                                            {viewingUser.address?.zipcode && (
-                                                <div className="flex justify-between">
-                                                    <span className="text-gray-600 dark:text-gray-400">Code postal</span>
-                                                    <span className="font-medium text-gray-900 dark:text-gray-100">
-                                                        {viewingUser.address.zipcode}
-                                                    </span>
-                                                </div>
-                                            )}
+                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                                            <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                                <p className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100">12</p>
+                                                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Projets</p>
+                                            </div>
+                                            <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                                <p className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100">48</p>
+                                                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Tâches</p>
+                                            </div>
+                                            <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                                <p className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100">92%</p>
+                                                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Actif</p>
+                                            </div>
+                                            <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                                                <p className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100">2j</p>
+                                                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Dern. connexion</p>
+                                            </div>
                                         </div>
                                     </CardContent>
                                 </Card>
-                            </div>
 
-                            {/* Statistiques */}
-                            <Card>
-                                <CardContent className="p-4">
-                                    <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                                        <Activity className="w-5 h-5 mr-2" />
-                                        Activité
-                                    </h3>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                        <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                                            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">12</p>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">Projets</p>
-                                        </div>
-                                        <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                                            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">48</p>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">Tâches</p>
-                                        </div>
-                                        <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                                            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">92%</p>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">Actif</p>
-                                        </div>
-                                        <div className="text-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
-                                            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">2j</p>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">Dern. connexion</p>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            {/* Actions */}
-                            <div className="flex flex-col sm:flex-row justify-between gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-                                <Button
-                                    variant="outline"
-                                    onClick={() => setUserDetailModalOpen(false)}
-                                    className="w-full sm:w-auto"
-                                >
-                                    Fermer
-                                </Button>
-                                <div className="flex gap-3">
+                                {/* Actions */}
+                                <div className="flex flex-col sm:flex-row justify-between gap-3 pt-4 sm:pt-6 border-t border-gray-200 dark:border-gray-700">
                                     <Button
                                         variant="outline"
-                                        onClick={() => {
-                                            setUserDetailModalOpen(false)
-                                            setTimeout(() => handleDelete(viewingUser), 300)
-                                        }}
-                                        className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                        onClick={() => setUserDetailModalOpen(false)}
+                                        className="w-full sm:w-auto order-2 sm:order-1"
                                     >
-                                        <Trash2 className="w-4 h-4 mr-2" />
-                                        Supprimer
+                                        Fermer
                                     </Button>
+                                    <div className="flex gap-3 order-1 sm:order-2">
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => {
+                                                setUserDetailModalOpen(false)
+                                                setTimeout(() => handleDelete(viewingUser), 300)
+                                            }}
+                                            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 w-full sm:w-auto"
+                                        >
+                                            <Trash2 className="w-4 h-4 mr-2" />
+                                            <span className="hidden sm:inline">Supprimer</span>
+                                            <span className="sm:hidden">Supprimer</span>
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </Modal>
             </div>
         </div>
