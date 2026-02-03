@@ -4,10 +4,11 @@ import SimpleChart from '../components/charts/SimpleChart'
 import { useApi } from '../hooks/useApi'
 import { productsService } from '../services/productsService'
 import { usersService } from '../services/usersService'
+import SkeletonLoader from '../components/common/SkeletonLoader'
 import {
     Users, Package, TrendingUp, DollarSign, Calendar,
-    ShoppingCart, BarChart3, Clock, Download, Filter,
-    TrendingDown, Zap, ThumbsUp, ChevronLeft, ChevronRight,
+    ShoppingCart, BarChart3, Clock, Download,
+    TrendingDown, Zap, ThumbsUp,
     Smartphone, Monitor, Tablet, Globe, Menu, X
 } from 'lucide-react'
 import {
@@ -124,6 +125,7 @@ export const Dashboard = () => {
     const [chartType, setChartType] = useState('line')
     const [activeChart, setActiveChart] = useState('sales')
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [loading, setLoading] = useState(true);
     const chartContainerRef = useRef(null)
 
     const usersApi = useApi(usersService.getUsers)
@@ -197,12 +199,15 @@ export const Dashboard = () => {
                 })
             } catch (error) {
                 console.error('Error fetching dashboard data:', error)
+            } finally {
+                setLoading(false)
             }
         }
 
         fetchData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
 
     const recentActivities = [
         { user: 'John Doe', action: 'a ajouté un produit', time: '2 min', icon: Package, amount: '€125,99' },
@@ -242,6 +247,62 @@ export const Dashboard = () => {
         window.addEventListener('resize', updateChartHeight)
         return () => window.removeEventListener('resize', updateChartHeight)
     }, [])
+
+    if (loading) {
+        return (
+            <div className="space-y-6">
+                <div>
+                    <SkeletonLoader type="text" className="h-8 w-48 mb-2" />
+                    <SkeletonLoader type="text" className="h-4 w-64" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {[...Array(4)].map((_, i) => (
+                        <Card key={i}>
+                            <CardContent className="p-6">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <SkeletonLoader type="text" className="h-4 w-24 mb-2" />
+                                        <SkeletonLoader type="text" className="h-8 w-16" />
+                                        <SkeletonLoader type="text" className="h-3 w-20 mt-1" />
+                                    </div>
+                                    <SkeletonLoader type="avatar" className="w-12 h-12 rounded-full" />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <Card>
+                        <CardHeader>
+                            <SkeletonLoader type="text" className="h-6 w-40" />
+                        </CardHeader>
+                        <CardContent>
+                            <SkeletonLoader type="card" className="h-48" />
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <SkeletonLoader type="text" className="h-6 w-40" />
+                        </CardHeader>
+                        <CardContent>
+                            {[...Array(4)].map((_, i) => (
+                                <div key={i} className="flex items-center justify-between p-3">
+                                    <div>
+                                        <SkeletonLoader type="text" className="h-4 w-32 mb-1" />
+                                        <SkeletonLoader type="text" className="h-3 w-24" />
+                                    </div>
+                                    <SkeletonLoader type="text" className="h-3 w-16" />
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6">
