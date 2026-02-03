@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { useApi } from '../hooks/useApi'
 import { usePagination } from '../hooks/usePagination'
 import { productsService } from '../services/productsService'
+import SkeletonLoader from '../components/common/SkeletonLoader'
 import {
     Table,
     TableHead,
@@ -317,7 +318,60 @@ Description: ${viewingProduct.description}
     }, [filteredProducts, productsApi.data])
 
     if (productsApi.loading && !productsApi.data) {
-        return <LoadingSpinner className="min-h-100" text="Chargement des produits..." />
+        return (
+            <div className="space-y-6">
+                {/* Même structure que Users mais adaptée aux produits */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <SkeletonLoader type="text" className="h-8 w-48 mb-2" />
+                        <SkeletonLoader type="text" className="h-4 w-64" />
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <SkeletonLoader type="text" className="h-10 w-64" />
+                        <SkeletonLoader type="text" className="h-10 w-40" />
+                    </div>
+                </div>
+                <Card>
+                    <CardContent className="p-0">
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    {['Produit', 'Catégorie', 'Prix', 'Évaluation', 'Actions'].map((header) => (
+                                        <TableHeader key={header}>
+                                            <SkeletonLoader type="text" className="h-4 w-24" />
+                                        </TableHeader>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {[...Array(5)].map((_, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>
+                                            <div className="flex items-center">
+                                                <SkeletonLoader type="avatar" className="mr-3 w-10 h-10 rounded-lg" />
+                                                <div>
+                                                    <SkeletonLoader type="text" className="h-4 w-48 mb-1" />
+                                                    <SkeletonLoader type="text" className="h-3 w-32" />
+                                                </div>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell><SkeletonLoader type="text" className="h-4 w-24" /></TableCell>
+                                        <TableCell><SkeletonLoader type="text" className="h-4 w-16" /></TableCell>
+                                        <TableCell><SkeletonLoader type="text" className="h-4 w-20" /></TableCell>
+                                        <TableCell>
+                                            <div className="flex justify-end space-x-2">
+                                                <SkeletonLoader type="text" className="h-8 w-8 rounded" />
+                                                <SkeletonLoader type="text" className="h-8 w-8 rounded" />
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+            </div>
+        )
     }
 
     if (productsApi.error) {
