@@ -22,9 +22,9 @@ const Sidebar = ({ onClose }) => {
     const { logout, user } = useAuth()
 
     return (
-        <aside className="flex flex-col h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-xl">
-            {/* En-tête de la sidebar */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex flex-col h-full">
+            {/* En-tête de la sidebar - FIXE */}
+            <div className="shrink-0 flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center">
                     <h1 className="text-xl font-bold text-primary-600 dark:text-primary-400">DashFlow</h1>
                 </div>
@@ -37,9 +37,9 @@ const Sidebar = ({ onClose }) => {
                 </button>
             </div>
 
-            {/* Navigation */}
-            <div className="flex-1 overflow-y-auto py-4">
-                <nav className="px-4 space-y-1">
+            {/* Navigation - SCROLLABLE INDÉPENDANT */}
+            <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
+                <nav className="px-4 py-4 space-y-1">
                     {navigation.map((item) => (
                         <NavLink
                             key={item.name}
@@ -63,8 +63,8 @@ const Sidebar = ({ onClose }) => {
                 </nav>
             </div>
 
-            {/* Section utilisateur et déconnexion */}
-            <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+            {/* Section utilisateur et déconnexion - FIXE */}
+            <div className="shrink-0 p-4 border-t border-gray-200 dark:border-gray-700">
                 <div className="flex items-center mb-4">
                     {user?.avatar ? (
                         <img
@@ -94,7 +94,7 @@ const Sidebar = ({ onClose }) => {
                     Déconnexion
                 </button>
             </div>
-        </aside>
+        </div>
     )
 }
 
