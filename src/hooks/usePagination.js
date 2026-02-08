@@ -1,5 +1,12 @@
 import { useState, useMemo } from 'react'
 
+/**
+ * Hook personnalisé pour gérer la pagination d'une liste
+ * Fournit les pages, items paginés et fonctions de navigation
+ * @param {Array} items - Liste à paginer
+ * @param {number} itemsPerPage - Nombre d'items par page
+ * @returns {Object} Pagination
+ */
 export function usePagination(items, itemsPerPage) {
     const [currentPage, setCurrentPage] = useState(1)
 

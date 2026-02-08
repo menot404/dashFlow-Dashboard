@@ -20,6 +20,11 @@ import Register from './pages/Register'
 // Composant de suspense pour les routes protégées
 const ProtectedRoute = lazy(() => import('./components/auth/ProtectedRoute'))
 
+/**
+ * Composant racine de l'application
+ * Gère le routage, les providers de thème, notification et authentification
+ * Utilise le lazy loading et le suspense pour optimiser le chargement des pages
+ */
 export default function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>

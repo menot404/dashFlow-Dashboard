@@ -1,3 +1,7 @@
+/**
+ * Instance Axios configurée pour les appels API
+ * Timeout et headers par défaut
+ */
 import axios from "axios";
 
 const api = axios.create({

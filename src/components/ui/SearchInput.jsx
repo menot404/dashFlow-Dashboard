@@ -1,5 +1,9 @@
 import { Search } from 'lucide-react'
 
+/**
+ * Composant SearchInput : champ de recherche stylisé avec icône
+ * Utilisé pour filtrer les listes et tableaux
+ */
 const SearchInput = ({ value, onChange, placeholder = 'Rechercher...', className = '' }) => {
     return (
         <div className={`relative ${className}`}>

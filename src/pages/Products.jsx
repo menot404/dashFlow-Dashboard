@@ -26,14 +26,27 @@ import { Eye, Edit, Trash2, Star, Tag, PackagePlus, PackageCheck, Image as Image
 import { ITEMS_PER_PAGE } from '../utils/constants'
 import { formatCurrency, formatNumber } from '../utils/helpers'
 
+/**
+ * Page de gestion des produits
+ * Permet d'afficher, filtrer, trier, créer, éditer, supprimer et visualiser les produits du catalogue.
+ * Utilise de nombreux hooks pour la gestion d'état, l'appel API, la pagination, la notification et la confirmation.
+ */
 const Products = () => {
+    // search : terme de recherche produit
     const [search, setSearch] = useState('')
+    // isModalOpen : état du modal de création/édition
     const [isModalOpen, setIsModalOpen] = useState(false)
+    // selectedProduct : produit sélectionné pour édition
     const [selectedProduct, setSelectedProduct] = useState(null)
+    // viewingProduct : produit affiché dans le modal de détails
     const [viewingProduct, setViewingProduct] = useState(null)
+    // detailModalOpen : état du modal de détails produit
     const [detailModalOpen, setDetailModalOpen] = useState(false)
+    // isDeleting : état de suppression en cours
     const [isDeleting, setIsDeleting] = useState(false)
+    // isSaving : état de sauvegarde en cours
     const [isSaving, setIsSaving] = useState(false)
+    // formData : état du formulaire produit (création/édition)
     const [formData, setFormData] = useState({
         title: '',
         price: '',
@@ -41,19 +54,33 @@ const Products = () => {
         category: '',
         image: '',
     })
+    // categories : liste des catégories disponibles
     const [categories, setCategories] = useState([])
+    // viewMode : mode d'affichage (grille ou tableau)
     const [viewMode, setViewMode] = useState('grid') // Démarrer avec la vue grille
+    // sortField : champ de tri
     const [sortField, setSortField] = useState('title')
+    // sortDirection : direction du tri
     const [sortDirection, setSortDirection] = useState('asc')
+    // isFilterOpen : état du panneau de filtres
     const [isFilterOpen, setIsFilterOpen] = useState(false)
+    // selectedCategories : catégories filtrées
     const [selectedCategories, setSelectedCategories] = useState([])
+    // priceRange : plage de prix filtrée
     const [priceRange, setPriceRange] = useState([0, 1000])
 
+    // Hook pour charger les produits via API
     const productsApi = useApi(productsService.getProducts)
+    // Hook pour la gestion des confirmations (modale)
     const { confirmationState, askConfirmation, closeConfirmation } = useConfirmation()
+    // Hooks pour afficher les notifications de succès/erreur
     const { showSuccess, showError } = useNotification()
+    // Référence pour le panneau de filtres (fermeture au clic extérieur)
     const filterRef = useRef(null)
 
+    /**
+     * Effet de chargement initial : récupère la liste des produits et des catégories
+     */
     useEffect(() => {
         loadProducts()
         loadCategories()
@@ -61,6 +88,9 @@ const Products = () => {
     }, [])
 
     // Désactiver la vue tableau pour les écrans < 1024
+    /**
+     * Effet pour forcer la vue grille sur les petits écrans (< 1024px)
+     */
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth < 1024) {
@@ -74,6 +104,9 @@ const Products = () => {
     }, [])
 
     // Fermer le filtre quand on clique à l'extérieur
+    /**
+     * Effet pour fermer le panneau de filtres au clic extérieur
+     */
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (filterRef.current && !filterRef.current.contains(event.target)) {
@@ -84,6 +117,9 @@ const Products = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
+    /**
+     * Charge les produits depuis l'API et gère les erreurs
+     */
     const loadProducts = async () => {
         try {
             await productsApi.execute()
@@ -93,6 +129,9 @@ const Products = () => {
         }
     }
 
+    /**
+     * Charge les catégories de produits depuis l'API
+     */
     const loadCategories = async () => {
         try {
             const data = await productsService.getCategories()
@@ -102,11 +141,17 @@ const Products = () => {
         }
     }
 
+    /**
+     * Ouvre le modal de détails pour un produit donné
+     */
     const handleViewDetails = (product) => {
         setViewingProduct(product)
         setDetailModalOpen(true)
     }
 
+    /**
+     * Copie les détails du produit affiché dans le presse-papier
+     */
     const handleCopyDetails = () => {
         if (viewingProduct) {
             const details = `
@@ -121,6 +166,9 @@ Description: ${viewingProduct.description}
         }
     }
 
+    /**
+     * Filtre et trie les produits selon la recherche, les filtres et le tri
+     */
     const filteredProducts = useMemo(() => {
         if (!productsApi.data) return []
 
@@ -158,8 +206,12 @@ Description: ${viewingProduct.description}
         return filtered
     }, [productsApi.data, search, selectedCategories, priceRange, sortField, sortDirection])
 
+    // Hook de pagination pour les produits filtrés
     const pagination = usePagination(filteredProducts, ITEMS_PER_PAGE)
 
+    /**
+     * Prépare le formulaire pour l'édition d'un produit
+     */
     const handleEdit = (product) => {
         setSelectedProduct(product)
         setFormData({
@@ -172,6 +224,9 @@ Description: ${viewingProduct.description}
         setIsModalOpen(true)
     }
 
+    /**
+     * Demande confirmation puis supprime le produit
+     */
     const handleDelete = (product) => {
         askConfirmation({
             title: 'Supprimer le produit',
@@ -195,6 +250,10 @@ Description: ${viewingProduct.description}
         })
     }
 
+    /**
+     * Soumet le formulaire de création/édition produit
+     * Valide les champs, appelle l'API et affiche les notifications
+     */
     const handleSubmit = async (e) => {
         e.preventDefault()
 
@@ -246,6 +305,9 @@ Description: ${viewingProduct.description}
         }
     }
 
+    /**
+     * Annule la création/édition produit avec confirmation si nécessaire
+     */
     const handleCancel = () => {
         if (formData.title || formData.price) {
             askConfirmation({
@@ -271,10 +333,16 @@ Description: ${viewingProduct.description}
         }
     }
 
+    /**
+     * Remplace l'image par défaut si l'URL est invalide
+     */
     const handleImageError = (e) => {
         e.target.src = 'https://via.placeholder.com/150?text=Image+non+disponible'
     }
 
+    /**
+     * Change la configuration du tri selon la colonne sélectionnée
+     */
     const handleSort = (field) => {
         if (sortField === field) {
             setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
@@ -284,6 +352,9 @@ Description: ${viewingProduct.description}
         }
     }
 
+    /**
+     * Ajoute ou retire une catégorie du filtre
+     */
     const toggleCategoryFilter = (category) => {
         setSelectedCategories(prev =>
             prev.includes(category)
@@ -292,6 +363,9 @@ Description: ${viewingProduct.description}
         )
     }
 
+    /**
+     * Réinitialise tous les filtres et tris
+     */
     const clearFilters = () => {
         setSelectedCategories([])
         setPriceRange([0, 1000])
@@ -301,6 +375,9 @@ Description: ${viewingProduct.description}
     }
 
     // Statistiques
+    /**
+     * Calcule les statistiques sur les produits filtrés
+     */
     const stats = useMemo(() => {
         if (!productsApi.data) return {}
 
@@ -317,6 +394,7 @@ Description: ${viewingProduct.description}
         }
     }, [filteredProducts, productsApi.data])
 
+    // Affichage du squelette de chargement pendant le fetch initial
     if (productsApi.loading && !productsApi.data) {
         return (
             <div className="space-y-6">
@@ -374,6 +452,7 @@ Description: ${viewingProduct.description}
         )
     }
 
+    // Affichage d'un message d'erreur si l'API échoue
     if (productsApi.error) {
         return (
             <ErrorMessage
@@ -384,6 +463,7 @@ Description: ${viewingProduct.description}
         )
     }
 
+    // Affichage d'un état vide si aucun produit ne correspond
     if (filteredProducts.length === 0 && !productsApi.loading) {
         return (
             <div className="space-y-4 p-3 sm:p-4 md:p-6">
@@ -449,6 +529,7 @@ Description: ${viewingProduct.description}
         )
     }
 
+    // Rendu principal de la page produits : tableau, grille, modals, pagination
     return (
         <div className="space-y-4 p-3 sm:p-4 md:p-6">
             {/* En-tête */}

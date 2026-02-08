@@ -1,6 +1,16 @@
+// Importation de React et clsx pour la gestion des classes
 import React from 'react'
 import clsx from 'clsx'
 
+/**
+ * Composant SkeletonLoader : affiche des loaders squelettes pour le chargement
+ * @param {string} type - Type de skeleton ('text', 'avatar', 'card', 'button', 'input')
+ * @param {number} count - Nombre d'éléments à afficher
+ * @param {string} className - Classes CSS additionnelles
+ * @param {string|number} width - Largeur personnalisée
+ * @param {string|number} height - Hauteur personnalisée
+ * @param {string} rounded - Style de bordure ('default', 'full', 'lg', 'xl', 'none')
+ */
 const SkeletonLoader = ({
     type = 'text',
     count = 1,
@@ -9,6 +19,7 @@ const SkeletonLoader = ({
     height,
     rounded = 'default'
 }) => {
+    // Retourne la classe de bordure selon le style demandé
     const getRoundedClass = () => {
         switch (rounded) {
             case 'full': return 'rounded-full'
@@ -19,6 +30,7 @@ const SkeletonLoader = ({
         }
     }
 
+    // Rend le skeleton selon le type demandé
     const renderSkeleton = () => {
         const baseClass = `bg-gray-200 dark:bg-gray-700 animate-pulse ${getRoundedClass()}`
 

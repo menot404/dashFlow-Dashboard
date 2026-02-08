@@ -2,10 +2,17 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Home, Search, RefreshCw } from 'lucide-react'
 import Button from '../components/ui/Button'
 
+/**
+ * Page d'erreur 404 - Page introuvable
+ * Affiche un message d'erreur, le chemin demandé, des suggestions de navigation et des actions pour revenir ou contacter le support.
+ */
 const NotFound = () => {
+  // location : objet contenant le chemin actuel
   const location = useLocation()
+  // navigate : hook pour naviguer dans l'historique
   const navigate = useNavigate()
 
+  // suggestions : liens alternatifs pour aider l'utilisateur à retrouver une page valide
   const suggestions = [
     { path: '/', label: 'Tableau de bord', icon: Home },
     { path: '/users', label: 'Utilisateurs' },
@@ -13,6 +20,7 @@ const NotFound = () => {
     { path: '/settings', label: 'Paramètres' },
   ]
 
+  // Rendu principal de la page 404 : message, suggestions, actions et contact support
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-16 max-w-4xl">

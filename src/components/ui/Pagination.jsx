@@ -1,6 +1,10 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
 
+/**
+ * Composant Pagination : navigation entre les pages d'une liste
+ * Affiche les boutons, numéros de page et gestion des ellipses
+ */
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     const getPageNumbers = () => {
         const delta = 2

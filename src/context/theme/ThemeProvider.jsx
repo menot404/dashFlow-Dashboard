@@ -1,10 +1,16 @@
+/**
+ * ThemeProvider : Fournit le contexte de thème (clair/sombre) à l'application
+ * Gère la persistance du thème dans le localStorage et l'application de la classe 'dark' sur le document
+ */
 import { useState, useEffect, useCallback } from 'react'
 import { LOCAL_STORAGE_KEYS } from '../../utils/constants'
 import { ThemeContext } from './ThemeContext'
 
 const ThemeProvider = ({ children }) => {
+    // État du thème actuel
     const [theme, setTheme] = useState('light')
 
+    // Effet pour charger le thème au démarrage (localStorage ou préférence système)
     useEffect(() => {
         const loadTheme = () => {
             try {
@@ -25,6 +31,7 @@ const ThemeProvider = ({ children }) => {
         loadTheme()
     }, [])
 
+    // Fonction pour basculer le thème et mettre à jour le localStorage
     const toggleTheme = useCallback(() => {
         const newTheme = theme === 'light' ? 'dark' : 'light'
         setTheme(newTheme)
@@ -37,12 +44,14 @@ const ThemeProvider = ({ children }) => {
         }
     }, [theme])
 
+    // Valeur du contexte
     const value = {
         theme,
         toggleTheme,
         isDark: theme === 'dark',
     }
 
+    // Fournit le contexte aux enfants
     return (
         <ThemeContext.Provider value={value}>
             {children}

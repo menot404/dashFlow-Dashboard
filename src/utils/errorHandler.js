@@ -1,4 +1,9 @@
-// Logging des erreurs côté client
+/**
+ * Logging des erreurs côté client
+ * Peut être relié à un service de monitoring (Sentry, etc.)
+ * @param {Error} error - Erreur à logger
+ * @param {Object} errorInfo - Infos supplémentaires
+ */
 export const logError = (error, errorInfo) => {
   if (import.meta.env.Dev) {
     console.error('Error:', error, errorInfo)
@@ -8,7 +13,12 @@ export const logError = (error, errorInfo) => {
   // Example: Sentry.captureException(error, { extra: errorInfo })
 }
 
-// Gestionnaire d'erreurs pour les routes
+/**
+ * Gestionnaire d'erreurs pour les routes
+ * Log l'erreur et retourne une réponse structurée
+ * @param {Error} error - Erreur de route
+ * @returns {Object} Réponse d'erreur
+ */
 export const handleRouteError = (error) => {
   logError(error, { type: 'ROUTE_ERROR' })
   

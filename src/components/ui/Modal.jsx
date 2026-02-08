@@ -2,6 +2,10 @@ import React, { Fragment, useEffect, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { X, Maximize2, Minimize2 } from 'lucide-react'
 
+/**
+ * Composant Modal : fenêtre modale réutilisable
+ * Gère l'affichage, la fermeture, le scroll et les options de style
+ */
 const Modal = ({
   isOpen,
   onClose,
@@ -43,6 +47,7 @@ const Modal = ({
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [handleKeyDown])
 
+  // Classes de taille et de padding pour la modale
   const sizeClasses = {
     xs: 'max-w-xs sm:max-w-sm',
     sm: 'max-w-sm sm:max-w-md',

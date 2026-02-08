@@ -9,11 +9,20 @@ import {
     Settings as SettingsIcon, Earth, LogOut, XCircle, Clock, Smartphone as Mobile, Laptop, Tablet
 } from 'lucide-react'
 
+/**
+ * Page de gestion des paramètres utilisateur
+ * Permet de modifier le profil, notifications, sécurité, apparence et actions de compte.
+ * Utilise de nombreux hooks pour la gestion d'état, l'authentification, le thème et la navigation.
+ */
 const Settings = () => {
+    // Récupère le thème actuel et la fonction de bascule (clair/sombre)
     const { theme, toggleTheme } = useTheme()
+    // Récupère l'utilisateur courant, la fonction de mise à jour et de déconnexion
     const { user, updateUser, logout } = useAuth()
+    // Permet de naviguer entre les pages
     const navigate = useNavigate()
 
+    // notifications : état local pour les préférences de notifications
     const [notifications, setNotifications] = useState({
         email: true,
         push: false,
@@ -23,12 +32,14 @@ const Settings = () => {
         newsletter: true,
     })
 
+    // security : état local pour les paramètres de sécurité
     const [security, setSecurity] = useState({
         twoFactor: false,
         sessionTimeout: '30',
         loginAlerts: true,
     })
 
+    // formData : état local pour les champs du profil utilisateur
     const [formData, setFormData] = useState({
         name: user?.name || '',
         email: user?.email || '',
@@ -38,10 +49,17 @@ const Settings = () => {
         timezone: 'Europe/Paris',
     })
 
+    // activeSection : section actuellement affichée (profil, notifications, etc.)
     const [activeSection, setActiveSection] = useState('profile')
+    // isSaving : indique si la sauvegarde est en cours
     const [isSaving, setIsSaving] = useState(false)
+    // showPassword : affiche ou masque le mot de passe
     const [showPassword, setShowPassword] = useState(false)
 
+    /**
+     * Sauvegarde les modifications du profil utilisateur
+     * Simule un appel API et affiche une alerte de succès ou d'erreur
+     */
     const handleSave = async () => {
         setIsSaving(true)
         try {
@@ -56,11 +74,17 @@ const Settings = () => {
         }
     }
 
+    /**
+     * Déconnecte l'utilisateur et redirige vers la page de connexion
+     */
     const handleLogout = () => {
         logout()
         navigate('/login')
     }
 
+    /**
+     * Liste des sections de paramètres disponibles (profil, notifications, etc.)
+     */
     const sections = [
         { id: 'profile', label: 'Profil', icon: User },
         { id: 'notifications', label: 'Notifications', icon: Bell },
@@ -69,6 +93,9 @@ const Settings = () => {
         { id: 'account', label: 'Compte', icon: SettingsIcon },
     ]
 
+    /**
+     * Liste des types de notifications configurables
+     */
     const notificationItems = [
         { id: 'email', label: 'Notifications par email', description: 'Recevez des notifications par email', icon: Mail },
         { id: 'push', label: 'Notifications push', description: 'Recevez des notifications push', icon: Bell },
@@ -78,6 +105,9 @@ const Settings = () => {
         { id: 'newsletter', label: 'Newsletter', description: 'Restez informé des nouveautés', icon: Mail },
     ]
 
+    /**
+     * Langues disponibles pour l'utilisateur
+     */
     const languages = [
         { code: 'fr', name: 'Français', flag: '🇫🇷' },
         { code: 'en', name: 'English', flag: '🇬🇧' },
@@ -85,6 +115,9 @@ const Settings = () => {
         { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
     ]
 
+    /**
+     * Fuseaux horaires disponibles
+     */
     const timezones = [
         { value: 'Europe/Paris', label: 'Paris (GMT+1)' },
         { value: 'Europe/London', label: 'Londres (GMT+0)' },
@@ -92,7 +125,9 @@ const Settings = () => {
         { value: 'Asia/Tokyo', label: 'Tokyo (GMT+9)' },
     ]
 
-    // Composant réutilisable pour les switch
+    /**
+     * Composant réutilisable pour un switch on/off stylisé
+     */
     const ToggleSwitch = ({ checked, onChange, id }) => (
         <label className="relative inline-flex items-center cursor-pointer">
             <input
@@ -111,7 +146,11 @@ const Settings = () => {
         </label>
     )
 
-    // Fonction pour obtenir les initiales
+    /**
+     * Retourne les initiales à partir d'un nom complet
+     * @param {string} name
+     * @returns {string}
+     */
     const getInitials = (name) => {
         if (!name) return '??'
         return name
@@ -122,6 +161,7 @@ const Settings = () => {
             .slice(0, 2)
     }
 
+    // Rendu principal de la page paramètres : sidebar, sections, formulaires, actions
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
             <div className="max-w-7xl mx-auto">

@@ -1,3 +1,4 @@
+// Importation des hooks React, composants de layout, icônes et breadcrumbs
 import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'
@@ -5,11 +6,23 @@ import Header from './Header'
 import { Menu } from 'lucide-react'
 import Breadcrumbs from '../common/Breadcrumbs'
 
+/**
+ * Composant Layout principal du dashboard
+ * Gère l'affichage du sidebar, du header, des breadcrumbs et du contenu principal.
+ * Adapte le comportement pour mobile (sidebar, scroll, overlay).
+ */
+/**
+ * Composant Layout principal du dashboard
+ * Gère l'affichage du sidebar, du header, des breadcrumbs et du contenu principal.
+ * Adapte le comportement pour mobile (sidebar, scroll, overlay).
+ */
 const Layout = () => {
+    // État d'ouverture du menu latéral
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    // Détection du mode mobile
     const [isMobile, setIsMobile] = useState(false)
 
-    // Détecter si on est sur mobile
+    // Effet pour détecter le mode mobile (largeur < 768px)
     useEffect(() => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768)
@@ -20,7 +33,7 @@ const Layout = () => {
         return () => window.removeEventListener('resize', checkMobile)
     }, [])
 
-    // Empêcher le scroll du body quand le sidebar est ouvert sur mobile
+    // Effet pour empêcher le scroll du body quand le sidebar est ouvert sur mobile
     useEffect(() => {
         if (sidebarOpen && isMobile) {
             document.body.style.overflow = 'hidden'
@@ -33,6 +46,7 @@ const Layout = () => {
         }
     }, [sidebarOpen, isMobile])
 
+    // Rendu principal du layout : sidebar, header, breadcrumbs, contenu
     return (
         <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
             {/* Overlay mobile avec blur */}

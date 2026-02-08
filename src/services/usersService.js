@@ -1,7 +1,13 @@
+/**
+ * Service utilisateur : gère les appels API pour CRUD utilisateurs
+ */
 import api from "./api";
 import { API_ENDPOINTS } from "../utils/constants";
 
 export const usersService = {
+    /**
+     * Récupère la liste des utilisateurs
+     */
     async getUsers() {
         try {
             const response = await api.get(API_ENDPOINTS.USERS);
@@ -12,6 +18,9 @@ export const usersService = {
         }
     },
 
+    /**
+     * Récupère un utilisateur par son id
+     */
     async getUserById(id) {
         try {
             const response = await api.get(`${API_ENDPOINTS.USERS}/${id}`);
@@ -22,6 +31,9 @@ export const usersService = {
         }
     },
 
+    /**
+     * Crée un nouvel utilisateur
+     */
     async createUser(userData) {
         try {
             const response = await api.post(API_ENDPOINTS.USERS, userData);
@@ -32,6 +44,9 @@ export const usersService = {
         }
     },
 
+    /**
+     * Met à jour un utilisateur existant
+     */
     async updateUser(id, userData) {
         try {
             const response = await api.put(`${API_ENDPOINTS.USERS}/${id}`, userData);
@@ -42,6 +57,9 @@ export const usersService = {
         }
     },
 
+    /**
+     * Supprime un utilisateur
+     */
     async deleteUser(id) {
         try {
             await api.delete(`${API_ENDPOINTS.USERS}/${id}`);

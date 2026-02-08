@@ -1,3 +1,7 @@
+/**
+ * Point d'entrée des contextes globaux
+ * Exporte les providers et contextes pour l'application
+ */
 // Export des Providers
 export { AuthProvider } from './auth/AuthProvider'
 export { ThemeProvider } from './theme/ThemeProvider'

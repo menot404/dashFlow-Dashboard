@@ -1,7 +1,12 @@
+/**
+ * NotificationProvider : Fournit le contexte de notification à l'application
+ * Gère l'affichage, l'ajout et la suppression des notifications globales
+ */
 import React, { useState, useCallback } from 'react'
 import { AlertCircle, CheckCircle, Info, XCircle, X } from 'lucide-react'
 import { NotificationContext } from './NotificationContext'
 
+// Icônes associées à chaque type de notification
 const icons = {
     success: CheckCircle,
     error: XCircle,
@@ -9,12 +14,17 @@ const icons = {
     info: Info,
 }
 
+/**
+ * Composant d'affichage des notifications (mémoïsé)
+ * Affiche chaque notification avec style, icône et bouton de fermeture
+ */
 const NotificationComponent = React.memo(({ notifications, removeNotification }) => {
     return (
         <div className="fixed top-4 right-4 z-50 space-y-3 max-w-md">
             {notifications.map((notification) => {
                 const Icon = icons[notification.type]
 
+                // Styles dynamiques selon le type
                 const styles = {
                     success: {
                         bg: 'bg-white dark:bg-gray-800',

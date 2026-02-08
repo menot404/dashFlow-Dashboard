@@ -1,7 +1,13 @@
+/**
+ * Service produit : gère les appels API pour CRUD produits
+ */
 import api from "./api";
 import { API_ENDPOINTS } from "../utils/constants";
 
 export const productsService = {
+    /**
+     * Récupère la liste des produits
+     */
     async getProducts() {
         try {
             const response = await api.get(API_ENDPOINTS.PRODUCTS);
@@ -14,6 +20,9 @@ export const productsService = {
         }
     },
 
+    /**
+     * Récupère un produit par son id
+     */
     async getProductById(id) {
         try {
             const response = await api.get(`${API_ENDPOINTS.PRODUCTS}/${id}`);
@@ -24,6 +33,9 @@ export const productsService = {
         }
     },
 
+    /**
+     * Crée un nouveau produit
+     */
     async createProduct(productData) {
         try {
             // Simuler un délai pour l'UX
@@ -38,6 +50,9 @@ export const productsService = {
         }
     },
 
+    /**
+     * Met à jour un produit existant
+     */
     async updateProduct(id, productData) {
         try {
             // Simuler un délai pour l'UX
@@ -55,6 +70,9 @@ export const productsService = {
         }
     },
 
+    /**
+     * Supprime un produit
+     */
     async deleteProduct(id) {
         try {
             // Simuler un délai pour l'UX

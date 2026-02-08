@@ -1,3 +1,4 @@
+// Importation des icônes, hooks d'authentification et utilitaire clsx
 import { NavLink } from 'react-router-dom'
 import {
     LayoutDashboard,
@@ -11,6 +12,7 @@ import {
 import { useAuth } from '../../hooks/useAuth'
 import clsx from 'clsx'
 
+// Définition des liens de navigation principaux
 const navigation = [
     { name: 'Dashboard', to: '/', icon: LayoutDashboard },
     { name: 'Utilisateurs', to: '/users', icon: Users },
@@ -18,9 +20,23 @@ const navigation = [
     { name: 'Paramètres', to: '/settings', icon: Settings },
 ]
 
+/**
+ * Composant Sidebar (menu latéral)
+ * Affiche la navigation principale, l'utilisateur connecté et le bouton de déconnexion.
+ * Gère la fermeture sur mobile et le scroll indépendant.
+ * @param {function} onClose - callback pour fermer le menu sur mobile
+ */
+/**
+ * Composant Sidebar (menu latéral)
+ * Affiche la navigation principale, l'utilisateur connecté et le bouton de déconnexion.
+ * Gère la fermeture sur mobile et le scroll indépendant.
+ * @param {function} onClose - callback pour fermer le menu sur mobile
+ */
 const Sidebar = ({ onClose }) => {
+    // Récupère la fonction de déconnexion et les infos utilisateur
     const { logout, user } = useAuth()
 
+    // Rendu principal du sidebar : navigation, utilisateur, déconnexion
     return (
         <div className="flex flex-col h-full">
             {/* En-tête de la sidebar - FIXE */}
@@ -28,6 +44,7 @@ const Sidebar = ({ onClose }) => {
                 <div className="flex items-center">
                     <h1 className="text-xl font-bold text-primary-600 dark:text-primary-400">DashFlow</h1>
                 </div>
+                {/* Bouton de fermeture du menu latéral sur mobile */}
                 <button
                     onClick={onClose}
                     className="md:hidden p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"

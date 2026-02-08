@@ -2,10 +2,21 @@ import { useState, useEffect, useCallback } from 'react'
 import { LOCAL_STORAGE_KEYS } from '../../utils/constants'
 import { AuthContext } from './AuthContext'
 
+/**
+ * Fournisseur de contexte d'authentification
+ * Gère l'état utilisateur, la connexion, la déconnexion et la mise à jour du profil.
+ * Persiste l'utilisateur dans le localStorage.
+ * @param {ReactNode} children - Composants enfants
+ */
 const AuthProvider = ({ children }) => {
+  // user : informations de l'utilisateur connecté
   const [user, setUser] = useState(null)
+  // loading : état de chargement initial
   const [loading, setLoading] = useState(true)
 
+  /**
+   * Effet de chargement initial : récupère l'utilisateur depuis le localStorage
+   */
   useEffect(() => {
     const loadUser = () => {
       try {
@@ -28,6 +39,11 @@ const AuthProvider = ({ children }) => {
     loadUser()
   }, [])
 
+  /**
+   * Connecte l'utilisateur (fake auth)
+   * @param {string} email - Email utilisateur
+   * @returns {Object} Utilisateur connecté
+   */
   const login = useCallback(async (email) => {
     // Fake authentication - ignorer le password
     const fakeUser = {
@@ -43,11 +59,18 @@ const AuthProvider = ({ children }) => {
     return fakeUser
   }, [])
 
+  /**
+   * Déconnecte l'utilisateur et nettoie le localStorage
+   */
   const logout = useCallback(() => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.USER)
     setUser(null)
   }, [])
 
+  /**
+   * Met à jour le profil utilisateur et persiste dans le localStorage
+   * @param {Object} userData - Données à mettre à jour
+   */
   const updateUser = useCallback((userData) => {
     setUser(prev => {
       const updatedUser = { ...prev, ...userData }
@@ -56,6 +79,7 @@ const AuthProvider = ({ children }) => {
     })
   }, [])
 
+  // Objet de contexte fourni aux enfants
   const value = {
     user,
     loading,
@@ -65,6 +89,7 @@ const AuthProvider = ({ children }) => {
     isAuthenticated: !!user,
   }
 
+  // Rendu du provider avec le contexte d'authentification
   return (
     <AuthContext.Provider value={value}>
       {children}

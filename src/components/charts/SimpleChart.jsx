@@ -13,13 +13,17 @@ const SimpleChart = ({
     showTooltip = true,
     animation = true
 }) => {
+    // État pour l'index survolé, position et visibilité du tooltip
     const [hoveredIndex, setHoveredIndex] = useState(null);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
     const [tooltipVisible, setTooltipVisible] = useState(false);
+    // Référence au conteneur SVG pour calculer la position du tooltip
     const containerRef = useRef(null);
+    // Valeurs min/max pour l'échelle
     const maxValue = Math.max(...data.map(item => item.value));
     const minValue = Math.min(...data.map(item => item.value));
 
+    // Définition des couleurs selon le type
     const colors = {
         primary: {
             bar: 'from-primary-500 to-primary-700',
@@ -43,6 +47,7 @@ const SimpleChart = ({
         }
     };
 
+    // Gestion du survol pour afficher le tooltip
     const handleMouseMove = (e, index) => {
         if (containerRef.current && showTooltip) {
             const rect = containerRef.current.getBoundingClientRect();
@@ -55,6 +60,7 @@ const SimpleChart = ({
         }
     };
 
+    // Masquer le tooltip au départ du survol
     const handleMouseLeave = () => {
         setTooltipVisible(false);
         setHoveredIndex(null);

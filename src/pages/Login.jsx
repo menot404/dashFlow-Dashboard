@@ -6,17 +6,33 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../compone
 import { isValidEmail } from '../utils/validators'
 import { Mail, Lock, AlertCircle, Eye, EyeOff, ArrowRight, Shield } from 'lucide-react'
 
+/**
+ * Page de connexion utilisateur
+ * Permet à l'utilisateur de se connecter avec email/mot de passe ou via un compte démo.
+ * Utilise les hooks d'authentification et de navigation pour gérer la session et la redirection.
+ */
 const Login = () => {
+    // email : champ email utilisateur
     const [email, setEmail] = useState('')
+    // password : champ mot de passe utilisateur
     const [password, setPassword] = useState('')
+    // error : message d'erreur affiché
     const [error, setError] = useState('')
+    // loading : état de chargement du bouton
     const [loading, setLoading] = useState(false)
+    // showPassword : affichage/masquage du mot de passe
     const [showPassword, setShowPassword] = useState(false)
+    // rememberMe : option "se souvenir de moi"
     const [rememberMe, setRememberMe] = useState(false)
 
+    // login : fonction d'authentification, navigate : redirection
     const { login } = useAuth()
     const navigate = useNavigate()
 
+    /**
+     * Soumet le formulaire de connexion
+     * Valide les champs, appelle l'API et gère la redirection
+     */
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError('')
@@ -43,6 +59,9 @@ const Login = () => {
         }
     }
 
+    /**
+     * Connexion rapide avec un compte démo
+     */
     const handleDemoLogin = async () => {
         setEmail('admin@example.com')
         setPassword('admin123')

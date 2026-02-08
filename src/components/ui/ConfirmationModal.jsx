@@ -33,6 +33,10 @@ const colors = {
     },
 }
 
+/**
+ * Composant ConfirmationModal : modale de confirmation d'action
+ * Affiche un message, icône, boutons et gère les types (warning, success, error, info)
+ */
 const ConfirmationModal = ({
     isOpen,
     onClose,

@@ -1,15 +1,24 @@
+// Importation des hooks React, icônes, navigation et composant Modal
 import { useState, useEffect, useRef } from 'react'
 import { Search, Command } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Modal from '../ui/Modal'
 
+/**
+ * Composant GlobalSearch : barre de recherche globale accessible via raccourci clavier
+ * Gère l'ouverture de la modal, la navigation, les suggestions et le focus automatique
+ */
 const GlobalSearch = () => {
+  // État d'ouverture de la modal de recherche
   const [isOpen, setIsOpen] = useState(false)
+  // Query de recherche
   const [query, setQuery] = useState('')
+  // Hook de navigation
   const navigate = useNavigate()
+  // Référence vers l'input pour focus
   const inputRef = useRef(null)
 
-  // Shortcut clavier Cmd+K / Ctrl+K
+  // Gestion du raccourci clavier Cmd+K / Ctrl+K pour ouvrir la recherche
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -25,13 +34,14 @@ const GlobalSearch = () => {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isOpen])
 
-  // Focus sur l'input quand modal ouvert
+  // Focus automatique sur l'input quand la modal est ouverte
   useEffect(() => {
     if (isOpen && inputRef.current) {
       setTimeout(() => inputRef.current?.focus(), 100)
     }
   }, [isOpen])
 
+  // Gestion de la soumission du formulaire de recherche
   const handleSearch = (e) => {
     e.preventDefault()
     if (query.trim()) {
@@ -41,6 +51,7 @@ const GlobalSearch = () => {
     }
   }
 
+  // Suggestions rapides pour la navigation
   const suggestions = [
     { label: 'Utilisateurs', action: () => navigate('/users') },
     { label: 'Produits', action: () => navigate('/products') },

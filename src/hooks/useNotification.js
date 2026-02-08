@@ -1,3 +1,8 @@
+/**
+ * Hook personnalisé pour accéder au contexte de notification
+ * Doit être utilisé dans un NotificationProvider
+ * @returns {Object} Contexte de notification
+ */
 import { useContext } from 'react'
 import { NotificationContext } from '../context/notification/NotificationContext'
 

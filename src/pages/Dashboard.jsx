@@ -21,6 +21,18 @@ import {
     formatNumber,
 } from '../utils/helpers'
 
+/**
+ * Composant StatCard
+ * Affiche une statistique clé du dashboard avec icône, valeur, évolution et sous-titre.
+ * @param {string} title - Titre de la statistique
+ * @param {string|number} value - Valeur principale
+ * @param {React.Component} icon - Icône Lucide associée
+ * @param {number} change - Pourcentage d'évolution
+ * @param {string} color - Couleur principale
+ * @param {boolean} loading - Affiche un loader si true
+ * @param {string} subtitle - Sous-titre optionnel
+ * @param {string} trend - Direction de l'évolution ('up'|'down')
+ */
 // eslint-disable-next-line no-unused-vars
 const StatCard = ({ title, value, icon: Icon, change, color, loading, subtitle, trend = 'up' }) => (
     <Card className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group">
@@ -60,6 +72,14 @@ const StatCard = ({ title, value, icon: Icon, change, color, loading, subtitle, 
     </Card>
 )
 
+/**
+ * Composant MetricBadge
+ * Affiche une métrique secondaire sous forme de badge avec icône et variante de couleur.
+ * @param {string|number} value - Valeur affichée
+ * @param {string} label - Libellé de la métrique
+ * @param {React.Component} icon - Icône Lucide
+ * @param {string} variant - Style visuel ('default'|'primary'|'success'|'warning')
+ */
 // eslint-disable-next-line no-unused-vars
 const MetricBadge = ({ value, label, icon: Icon, variant = 'default' }) => {
     const variants = {
@@ -82,6 +102,11 @@ const MetricBadge = ({ value, label, icon: Icon, variant = 'default' }) => {
     )
 }
 
+/**
+ * Composant DeviceIcon
+ * Affiche une icône stylisée selon le type d'appareil (mobile, desktop, tablet, other).
+ * @param {string} type - Type d'appareil
+ */
 const DeviceIcon = ({ type }) => {
     const icons = {
         mobile: Smartphone,
@@ -105,7 +130,13 @@ const DeviceIcon = ({ type }) => {
     )
 }
 
+/**
+ * Page principale du Dashboard
+ * Affiche les statistiques globales, graphiques, top produits, activités récentes, etc.
+ * Utilise de nombreux hooks pour la gestion d'état, l'appel API et la génération de données simulées.
+ */
 export const Dashboard = () => {
+    // État principal des statistiques du dashboard
     const [stats, setStats] = useState({
         totalUsers: 0,
         totalProducts: 0,
@@ -121,22 +152,35 @@ export const Dashboard = () => {
         newCustomers: 245
     })
 
+    // timeRange : période sélectionnée pour les graphiques ('7d', '30d', '90d', '1a')
     const [timeRange, setTimeRange] = useState('30d')
+    // chartType : type de graphique affiché ('line', 'bar', 'area')
     const [chartType, setChartType] = useState('line')
+    // activeChart : graphique actif ('sales', 'revenue', 'users', 'performance')
     const [activeChart, setActiveChart] = useState('sales')
+    // isMenuOpen : état du menu mobile
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    // loading : état de chargement global
     const [loading, setLoading] = useState(true);
+    // chartContainerRef : ref pour le conteneur du graphique principal
     const chartContainerRef = useRef(null)
 
+    // Hooks personnalisés pour charger les utilisateurs et produits via API
     const usersApi = useApi(usersService.getUsers)
     const productsApi = useApi(productsService.getProducts)
 
-    // Génération de données simulées
+    // Génération de données simulées pour les graphiques principaux
+    /**
+     * Données de ventes simulées selon la période sélectionnée
+     */
     const salesData = useMemo(() => {
         const period = timeRange === '7d' ? 'daily' : timeRange === '30d' ? 'daily' : timeRange === '90d' ? 'weekly' : 'monthly'
         return generateSalesData(period)
     }, [timeRange])
 
+    /**
+     * Données de revenus simulées selon la période sélectionnée
+     */
     const revenueData = useMemo(() => {
         const count = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : timeRange === '90d' ? 12 : 12
         const labels = timeRange === '7d' ? 'days' : timeRange === '30d' ? 'days' : timeRange === '90d' ? 'weeks' : 'months'
@@ -150,9 +194,15 @@ export const Dashboard = () => {
         })
     }, [timeRange])
 
+    /**
+     * Données de croissance utilisateurs et de performance simulées
+     */
     const userGrowthData = useMemo(() => generateUserGrowthData(), [])
     const performanceData = useMemo(() => generatePerformanceData(), [])
 
+    /**
+     * Répartition simulée du trafic par type d'appareil
+     */
     const trafficData = useMemo(() => {
         const devices = [
             { label: 'Mobile', value: 65, type: 'mobile' },
@@ -163,10 +213,16 @@ export const Dashboard = () => {
         return devices
     }, [])
 
+    /**
+     * Métriques business simulées pour les indicateurs clés
+     */
     const salesMetrics = useMemo(() => generateBusinessMetrics('sales'), [])
     const userMetrics = useMemo(() => generateBusinessMetrics('users'), [])
     const conversionMetrics = useMemo(() => generateBusinessMetrics('conversion'), [])
 
+    /**
+     * Effet de chargement initial : récupère les données utilisateurs/produits et calcule les stats globales.
+     */
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -174,15 +230,13 @@ export const Dashboard = () => {
                     usersApi.execute(),
                     productsApi.execute(),
                 ])
-
+                // Calculs statistiques à partir des données API et génération de valeurs aléatoires pour la démo
                 const totalRevenue = products.reduce((sum, product) => sum + product.price, 0) * 25
-
                 const monthlyVisitors = 12500 + Math.floor(Math.random() * 5000)
                 const bounceRate = 30 + Math.random() * 10
                 const avgSessionMinutes = 3 + Math.random() * 2
                 const avgSessionSeconds = Math.floor(Math.random() * 60)
                 const newCustomers = 200 + Math.floor(Math.random() * 100)
-
                 setStats({
                     totalUsers: users.length,
                     totalProducts: products.length,
@@ -203,12 +257,14 @@ export const Dashboard = () => {
                 setLoading(false)
             }
         }
-
         fetchData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
+    /**
+     * Liste d'activités récentes simulées pour affichage dans le dashboard
+     */
     const recentActivities = [
         { user: 'John Doe', action: 'a ajouté un produit', time: '2 min', icon: Package, amount: '€125,99' },
         { user: 'Jane Smith', action: 'profil mis à jour', time: '15 min', icon: Users, amount: null },
@@ -218,6 +274,9 @@ export const Dashboard = () => {
         { user: 'Emily Davis', action: 'remboursement traité', time: '4h', icon: DollarSign, amount: '€45,00' },
     ]
 
+    /**
+     * Top produits simulés pour le tableau du dashboard
+     */
     const topProducts = [
         { name: 'iPhone 15 Pro', sales: 245, revenue: '€58 800', growth: 24, category: 'Électronique' },
         { name: 'MacBook Air M2', sales: 189, revenue: '€23 625', growth: 18, category: 'Informatique' },
@@ -226,6 +285,9 @@ export const Dashboard = () => {
         { name: 'Apple Watch', sales: 278, revenue: '€13 900', growth: 21, category: 'Wearable' },
     ]
 
+    /**
+     * Répartition simulée des méthodes de paiement
+     */
     const paymentMethods = [
         { method: 'Carte de crédit', percentage: 65, color: 'bg-blue-500' },
         { method: 'PayPal', percentage: 22, color: 'bg-blue-400' },
@@ -233,7 +295,9 @@ export const Dashboard = () => {
         { method: 'Apple Pay', percentage: 5, color: 'bg-black' },
     ]
 
-    // Fonction pour ajuster la hauteur du graphique
+    /**
+     * Ajuste dynamiquement la hauteur du graphique principal selon la largeur du conteneur (responsive)
+     */
     useEffect(() => {
         const updateChartHeight = () => {
             if (chartContainerRef.current) {
@@ -242,12 +306,12 @@ export const Dashboard = () => {
                 chartContainerRef.current.style.height = `${height}px`
             }
         }
-
         updateChartHeight()
         window.addEventListener('resize', updateChartHeight)
         return () => window.removeEventListener('resize', updateChartHeight)
     }, [])
 
+    // Affichage d'un squelette de chargement pendant le fetch initial
     if (loading) {
         return (
             <div className="space-y-6">
@@ -304,6 +368,7 @@ export const Dashboard = () => {
         )
     }
 
+    // Rendu principal du dashboard : statistiques, graphiques, tableaux, activités, métriques secondaires
     return (
         <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6">
             {/* Header avec menu mobile */}

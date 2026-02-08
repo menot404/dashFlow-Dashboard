@@ -1,5 +1,9 @@
 import clsx from "clsx";
 
+/**
+ * Composant Button : bouton stylisé réutilisable
+ * Gère les variantes, tailles, loading et disabled
+ */
 const Button = ({
     children,
     variant = 'primary',

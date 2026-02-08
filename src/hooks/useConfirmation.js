@@ -1,5 +1,10 @@
 import { useState, useCallback } from "react";
 
+/**
+ * Hook personnalisé pour gérer les confirmations utilisateur (modale)
+ * Fournit l'état, la fonction pour demander et fermer la confirmation
+ * @returns {Object} confirmationState, askConfirmation, closeConfirmation
+ */
 export const useConfirmation = () => {
     const [confirmationState, setConfirmationState] = useState({
         isOpen: false,

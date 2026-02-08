@@ -29,19 +29,34 @@ import {
 } from 'lucide-react'
 import { ITEMS_PER_PAGE } from '../utils/constants'
 
+/**
+ * Page de gestion des utilisateurs
+ * Permet d'afficher, filtrer, trier, créer, éditer, supprimer et visualiser les utilisateurs.
+ * Utilise de nombreux hooks pour la gestion d'état, l'appel API, la pagination, la notification et la confirmation.
+ */
 export const Users = () => {
+    // search : terme de recherche utilisateur
     const [search, setSearch] = useState('')
+    // isModalOpen : état du modal de création/édition
     const [isModalOpen, setIsModalOpen] = useState(false)
+    // selectedUser : utilisateur sélectionné pour édition
     const [selectedUser, setSelectedUser] = useState(null)
+    // isDeleting : état de suppression en cours
     const [isDeleting, setIsDeleting] = useState(false)
+    // isSaving : état de sauvegarde en cours
     const [isSaving, setIsSaving] = useState(false)
+    // viewingUser : utilisateur affiché dans le modal de détails
     const [viewingUser, setViewingUser] = useState(null)
+    // userDetailModalOpen : état du modal de détails utilisateur
     const [userDetailModalOpen, setUserDetailModalOpen] = useState(false)
+    // sortConfig : configuration du tri (clé et direction)
     const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' })
+    // activeFilters : filtres actifs (statut, rôle)
     const [activeFilters, setActiveFilters] = useState({
         status: 'all',
         role: 'all'
     })
+    // formData : état du formulaire utilisateur (création/édition)
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -52,15 +67,24 @@ export const Users = () => {
         status: 'active'
     })
 
+    // Hook pour charger les utilisateurs via API
     const usersApi = useApi(usersService.getUsers)
+    // Hook pour la gestion des confirmations (modale)
     const { confirmationState, askConfirmation, closeConfirmation } = useConfirmation()
+    // Hooks pour afficher les notifications de succès/erreur
     const { showSuccess, showError } = useNotification()
 
+    /**
+     * Effet de chargement initial : récupère la liste des utilisateurs
+     */
     useEffect(() => {
         loadUsers()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    /**
+     * Charge les utilisateurs depuis l'API et gère les erreurs
+     */
     const loadUsers = useCallback(async () => {
         try {
             await usersApi.execute()
@@ -70,11 +94,17 @@ export const Users = () => {
         }
     }, [usersApi, showError])
 
+    /**
+     * Ouvre le modal de détails pour un utilisateur donné
+     */
     const handleViewUserDetails = useCallback((user) => {
         setViewingUser(user)
         setUserDetailModalOpen(true)
     }, [])
 
+    /**
+     * Copie les détails de l'utilisateur affiché dans le presse-papier
+     */
     const handleCopyUserDetails = useCallback(() => {
         if (viewingUser) {
             const details = `
@@ -91,6 +121,9 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         }
     }, [viewingUser, showSuccess])
 
+    /**
+     * Filtre et trie les utilisateurs selon la recherche, les filtres et le tri
+     */
     const filteredUsers = useMemo(() => {
         if (!usersApi.data) return []
 
@@ -122,8 +155,12 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         return result
     }, [usersApi.data, search, activeFilters, sortConfig])
 
+    // Hook de pagination pour les utilisateurs filtrés
     const pagination = usePagination(filteredUsers, ITEMS_PER_PAGE)
 
+    /**
+     * Prépare le formulaire pour l'édition d'un utilisateur
+     */
     const handleEdit = useCallback((user) => {
         setSelectedUser(user)
         setFormData({
@@ -138,6 +175,9 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         setIsModalOpen(true)
     }, [])
 
+    /**
+     * Retourne les initiales à partir d'un nom complet
+     */
     const getInitials = useCallback((name) => {
         if (!name) return '??'
         return name
@@ -148,6 +188,9 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
             .slice(0, 2)
     }, [])
 
+    /**
+     * Demande confirmation puis supprime l'utilisateur
+     */
     const handleDelete = useCallback((user) => {
         askConfirmation({
             title: 'Supprimer l\'utilisateur',
@@ -171,6 +214,10 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         })
     }, [askConfirmation, showSuccess, showError, loadUsers])
 
+    /**
+     * Soumet le formulaire de création/édition utilisateur
+     * Valide les champs, appelle l'API et affiche les notifications
+     */
     const handleSubmit = async (e) => {
         e.preventDefault()
 
@@ -203,6 +250,9 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         }
     }
 
+    /**
+     * Annule la création/édition utilisateur avec confirmation si nécessaire
+     */
     const handleCancel = useCallback(() => {
         if (formData.name || formData.email) {
             askConfirmation({
@@ -230,6 +280,9 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         }
     }, [formData, askConfirmation])
 
+    /**
+     * Change la configuration du tri selon la colonne sélectionnée
+     */
     const handleSort = useCallback((key) => {
         setSortConfig(prev => ({
             key,
@@ -237,6 +290,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         }))
     }, [])
 
+    // Affichage du squelette de chargement pendant le fetch initial
     if (usersApi.loading && !usersApi.data) {
         return (
             <div className="space-y-6">
@@ -294,6 +348,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         )
     }
 
+    // Affichage d'un message d'erreur si l'API échoue
     if (usersApi.error) {
         return (
             <div className="min-h-screen flex items-center justify-center">
@@ -306,6 +361,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         )
     }
 
+    // Affichage d'un état vide si aucun utilisateur ne correspond
     if (filteredUsers.length === 0 && !usersApi.loading) {
         return (
             <div className="space-y-6 p-4 sm:p-6">
@@ -365,6 +421,9 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         )
     }
 
+    /**
+     * Composant d'icône de tri pour les colonnes du tableau
+     */
     const SortIcon = ({ column }) => (
         <button
             onClick={() => handleSort(column)}
@@ -378,6 +437,7 @@ Statut: ${viewingUser.status === 'active' ? 'Actif' : 'Inactif'}
         </button>
     )
 
+    // Rendu principal de la page utilisateurs : tableau, mobile, modals, pagination
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
             <div className="max-w-7xl mx-auto">

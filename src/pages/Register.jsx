@@ -6,46 +6,61 @@ import { useAuth } from '../hooks/useAuth'
 import { isValidEmail, isValidPassword } from '../utils/validators'
 import { Mail, Lock, User, AlertCircle } from 'lucide-react'
 
+/**
+ * Page d'inscription utilisateur
+ * Permet à un nouvel utilisateur de créer un compte avec validation des champs et gestion d'erreur.
+ * Utilise les hooks React pour la gestion d'état, la navigation et l'authentification.
+ */
 const Register = () => {
+    // formData : état local pour les champs du formulaire d'inscription
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         password: '',
         confirmPassword: '',
     })
+    // error : message d'erreur affiché à l'utilisateur
     const [error, setError] = useState('')
+    // loading : indique si l'inscription est en cours
     const [loading, setLoading] = useState(false)
 
+    // Récupère la fonction login du contexte d'authentification
     const { login } = useAuth()
+    // Permet de naviguer après inscription
     const navigate = useNavigate()
 
+    /**
+     * Gère la soumission du formulaire d'inscription
+     * Valide les champs, affiche les erreurs et simule l'inscription (login direct)
+     * Redirige vers la page d'accueil en cas de succès
+     */
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError('')
 
+        // Validation du nom
         if (!formData.name.trim()) {
             setError('Veuillez entrer votre nom complet')
             return
         }
-
+        // Validation de l'email
         if (!isValidEmail(formData.email)) {
             setError('Veuillez entrer un email valide')
             return
         }
-
+        // Validation du mot de passe
         if (!isValidPassword(formData.password)) {
             setError('Le mot de passe doit contenir au moins 6 caractères')
             return
         }
-
+        // Vérification de la confirmation du mot de passe
         if (formData.password !== formData.confirmPassword) {
             setError('Les mots de passe ne correspondent pas')
             return
         }
-
         try {
             setLoading(true)
-            // Fake registration - just log in the user
+            // Simulation d'inscription : login direct
             await login(formData.email, formData.password)
             navigate('/')
         } catch (err) {
@@ -55,6 +70,10 @@ const Register = () => {
         }
     }
 
+    /**
+     * Met à jour l'état formData lors de la saisie utilisateur
+     * @param {object} e - événement de changement d'input
+     */
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setFormData(prev => ({
@@ -63,6 +82,7 @@ const Register = () => {
         }))
     }
 
+    // Rendu principal du formulaire d'inscription avec gestion des erreurs et loader
     return (
         <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4 md:p-6">
             <div className="w-full max-w-md mx-auto">

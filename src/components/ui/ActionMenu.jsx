@@ -4,6 +4,10 @@ import { Menu, Transition } from '@headlessui/react'
 import { MoreVertical, Eye, Edit, Trash2, Copy, Download } from 'lucide-react'
 import clsx from 'clsx'
 
+/**
+ * Composant ActionMenu : menu d'actions contextuelles (table, cartes)
+ * Affiche les options de vue, édition, suppression, copie, téléchargement
+ */
 const ActionMenu = ({
   onView,
   onEdit,

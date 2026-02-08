@@ -1,3 +1,8 @@
+/**
+ * Hook personnalisé pour accéder au contexte d'authentification
+ * Doit être utilisé dans un AuthProvider
+ * @returns {Object} Contexte d'authentification
+ */
 import { useContext } from 'react'
 import { AuthContext } from '../context/auth/AuthContext'
 
